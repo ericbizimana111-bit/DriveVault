@@ -1,0 +1,135 @@
+.page { width: 100%; }
+
+.header {
+  background: var(--primary);
+  padding: 80px 24px;
+  text-align: center;
+}
+
+.container { max-width: 1100px; margin: 0 auto; }
+
+.badge {
+  display: inline-block;
+  background: rgba(232,160,32,0.15);
+  color: var(--accent);
+  border: 1px solid rgba(232,160,32,0.3);
+  padding: 6px 16px;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+}
+
+.header h1 { color: white; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; margin-bottom: 20px; }
+.header p { color: rgba(255,255,255,0.75); font-size: 1rem; line-height: 1.8; max-width: 620px; margin: 0 auto; }
+
+.section { padding: 80px 24px; background: var(--bg); }
+.sectionAlt { padding: 80px 24px; background: #eef2ee; }
+.sectionDark { padding: 80px 24px; background: var(--primary); }
+
+.sectionHead { text-align: center; margin-bottom: 48px; }
+.sectionHead h2 { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+.sectionHead p { color: var(--text-muted); max-width: 500px; margin: 0 auto; line-height: 1.7; }
+
+/* MISSION */
+.missionRow { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+.missionRow h2 { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin-bottom: 16px; }
+.missionRow p { color: var(--text-muted); line-height: 1.8; margin-bottom: 16px; }
+
+.missionStats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.mStat { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+.mStatNum { display: block; font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.mStatLabel { font-size: 0.8rem; color: var(--text-muted); line-height: 1.4; }
+
+/* STEPS */
+.steps { display: flex; align-items: flex-start; gap: 0; position: relative; flex-wrap: wrap; }
+
+.step { display: flex; flex-direction: column; align-items: center; text-align: center; flex: 1; min-width: 180px; position: relative; }
+
+.stepNum {
+  width: 56px; height: 56px;
+  background: var(--primary);
+  color: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  flex-shrink: 0;
+}
+
+.stepContent h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.stepContent p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; }
+
+.stepArrow {
+  position: absolute;
+  top: 20px;
+  right: -16px;
+  color: var(--accent);
+  font-size: 1.2rem;
+  font-weight: 700;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+/* TEAM */
+.teamGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+
+.teamCard {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.2s;
+}
+.teamCard:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
+
+.teamIcon { font-size: 2.5rem; margin-bottom: 16px; }
+.teamCard h3 { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.teamCard p { color: var(--text-muted); font-size: 0.85rem; }
+
+/* RWANDA INFO */
+.rwandaRow { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+
+.infoBox {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.infoBox h4 { color: var(--accent); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+
+.infoBox ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.infoBox li { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.infoBox li:last-child { border: none; }
+.infoBox li span { color: rgba(255,255,255,0.6); font-size: 0.85rem; }
+.infoBox li strong { color: white; font-size: 0.9rem; }
+
+/* CTA */
+.cta { padding: 80px 24px; text-align: center; background: white; }
+.cta h2 { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+.cta p { color: var(--text-muted); max-width: 480px; margin: 0 auto 28px; }
+
+.btn {
+  background: var(--accent);
+  color: var(--primary);
+  border: none;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+.btn:hover { background: var(--accent-light); transform: translateY(-2px); }
+
+@media (max-width: 768px) {
+  .missionRow, .rwandaRow { grid-template-columns: 1fr; gap: 32px; }
+  .missionStats { grid-template-columns: 1fr 1fr; }
+  .steps { flex-direction: column; }
+  .stepArrow { display: none; }
+}

@@ -1,0 +1,117 @@
+.page { display: flex; flex-direction: column; gap: 24px; }
+
+.header { margin-bottom: 4px; }
+.header h1 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
+.header p { color: var(--text-muted); font-size: 0.9rem; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.cardTitle { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 20px; }
+
+.profileTop { display: flex; flex-direction: column; align-items: center; gap: 12px; padding-bottom: 20px; }
+
+.avatar {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  border: 3px solid var(--accent);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar span { color: var(--accent); font-size: 2.2rem; font-weight: 700; }
+
+.profileName { font-size: 1.1rem; font-weight: 700; color: var(--primary); }
+.profileRole { font-size: 0.78rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.divider { height: 1px; background: var(--border); margin-bottom: 20px; }
+
+.details { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.detail { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.detail:last-child { border: none; }
+.detail span { color: var(--text-muted); }
+.detail strong { color: var(--text); font-weight: 600; text-align: right; }
+
+.infoNote {
+  background: #f8faf8;
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-radius: 0 8px 8px 0;
+}
+
+/* LICENSE CARD */
+.licCard {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 0;
+}
+
+.licHeader { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.licLabel { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+.licCode { font-size: 3rem; font-weight: 700; line-height: 1; font-family: 'IBM Plex Mono', monospace; }
+.licIcon { font-size: 2.5rem; }
+.licName { font-size: 1rem; font-weight: 700; color: var(--primary); margin-bottom: 14px; }
+.licVehicles span { font-size: 0.75rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 4px; }
+.licVehicles p { font-size: 0.88rem; color: var(--text); line-height: 1.6; }
+
+/* LICENSE LIST */
+.licList { display: flex; flex-direction: column; gap: 8px; }
+
+.licItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.licItemActive {
+  background: #f0f8f4;
+  border-color: var(--primary-light);
+}
+
+.licItemCode {
+  color: white;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.licItemInfo { display: flex; flex-direction: column; gap: 2px; }
+.licItemInfo strong { font-size: 0.85rem; color: var(--primary); }
+.licItemInfo span { font-size: 0.75rem; color: var(--text-muted); }
+
+/* ROAD RULES */
+.rulesGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+
+.rule {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 10px;
+}
+.rule span { font-size: 1.2rem; flex-shrink: 0; }
+.rule p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .rulesGrid { grid-template-columns: repeat(2, 1fr); }
+}
