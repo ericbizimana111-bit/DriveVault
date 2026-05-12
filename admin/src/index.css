@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+    --primary: #1a3a2a;
+    --primary-light: #2d5c42;
+    --accent: #e8a020;
+    --accent-light: #f5c060;
+    --bg: #f4f6f3;
+    --bg-card: #ffffff;
+    --text: #0f1f17;
+    --text-muted: #5a7065;
+    --border: #d0dbd3;
+    --danger: #c0392b;
+    --success: #27ae60;
+    --warning: #e67e22;
+    --sidebar-width: 250px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    font-family: inherit;
+}
+
+input,
+select,
+textarea {
+    font-family: inherit;
+    outline: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 3px;
+}
+
+/* Utility */
+.mono {
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+/* Toastify override */
+.Toastify__toast {
+    font-family: 'Sora', sans-serif;
+    border-radius: 8px;
+}

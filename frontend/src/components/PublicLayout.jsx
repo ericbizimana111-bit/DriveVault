@@ -1,17 +1,22 @@
 import { useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './PublicLayout.module.css';
 
 export default function PublicLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogout = () => { logout(); navigate('/'); };
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <div className={styles.wrapper}>
+      {/* HEADER */}
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <div className={styles.logo} onClick={() => navigate('/')}>
@@ -31,13 +36,23 @@ export default function PublicLayout() {
           <div className={styles.actions}>
             {user ? (
               <>
-                <button className={styles.dashBtn} onClick={() => navigate(user.role === 'admin' ? '/admin' : '/dashboard')}>
+                <button
+                  className={styles.dashBtn}
+                  onClick={() =>
+                    navigate(user.role === 'admin' ? '/admin' : '/dashboard')
+                  }
+                >
                   {user.role === 'admin' ? 'Admin Panel' : 'My Dashboard'}
                 </button>
-                <button className={styles.logoutBtn} onClick={handleLogout}>Logout</button>
+
+                <button className={styles.logoutBtn} onClick={handleLogout}>
+                  Logout
+                </button>
               </>
             ) : (
-              <button className={styles.loginBtn} onClick={() => navigate('/login')}>Login</button>
+              <button className={styles.loginBtn} onClick={() => navigate('/login')}>
+                Login
+              </button>
             )}
           </div>
 
@@ -47,20 +62,30 @@ export default function PublicLayout() {
         </div>
       </header>
 
+      {/* MAIN CONTENT */}
       <main className={styles.main}>
         <Outlet />
       </main>
 
-      <footer className={styles.footer}>
-        <div className={styles.footerInner}>
-          <div className={styles.footerLogo}>
-            <div className={styles.logoIcon}>🚗</div>
-            <span>Rwanda DriveDoc</span>
+      {/* FOOTER (HIDDEN ONLY ON LOGIN PAGE) */}
+      {location.pathname !== '/login' && (
+        <footer className={styles.footer}>
+          <div className={styles.footerInner}>
+            <div className={styles.footerLogo}>
+              <div className={styles.logoIcon}>🚗</div>
+              <span>Rwanda DriveDoc</span>
+            </div>
+
+            <p>
+              A service powered by Rwanda National Police & Transport Authority
+            </p>
+
+            <p className={styles.footerCopy}>
+              © {new Date().getFullYear()} Rwanda DriveDoc. All rights reserved.
+            </p>
           </div>
-          <p>A service powered by Rwanda National Police & Transport Authority</p>
-          <p className={styles.footerCopy}>© {new Date().getFullYear()} Rwanda DriveDoc. All rights reserved.</p>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }
