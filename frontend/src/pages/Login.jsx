@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import styles from './Login.module.css';
 
+
 export default function Login() {
   const { login, user } = useAuth();
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ export default function Login() {
     <div className={styles.page}>
       <div className={styles.left}>
         <div className={styles.leftContent}>
-          <div className={styles.logo}>
+          <div className={styles.logo} onClick={() => navigate('/')}>
             <span>🚗</span>
             <div>
               <div className={styles.logoMain}>Rwanda DriveDoc</div>
@@ -93,7 +94,7 @@ export default function Login() {
               </div>
             </div>
 
-            <button type="submit" className={styles.submitBtn} disabled={loading}>
+            <button type="submit" className={styles.submitBtn} disabled={loading} onClick={() => navigate('/dashboard')}>
               {loading ? 'Signing in...' : 'Sign In →'}
             </button>
           </form>
@@ -101,11 +102,8 @@ export default function Login() {
           <div className={styles.note}>
             <p>🔒 Accounts are created by Rwanda National Police administrators only. If you don't have an account, contact your nearest RNP office.</p>
           </div>
-
-          <div className={styles.demoNote}>
-            <p><strong>Demo credentials:</strong></p>
-            <p>Admin: admin@rwandadrive.rw / password</p>
-          </div>
+          <p className={styles.signup}>Dont have an account? <span onClick={() => navigate('/signup')}>Sign Up </span></p>
+          
         </div>
       </div>
     </div>

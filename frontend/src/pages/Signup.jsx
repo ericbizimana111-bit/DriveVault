@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-toastify'; //shwo success or error messages 
 import { useAuth } from '../context/AuthContext';
 import styles from './Signup.module.css';
 
@@ -117,7 +117,7 @@ export default function Signup() {
                                         name="name"
                                         value={form.name}
                                         onChange={handleChange}
-                                        placeholder="Jean Paul Hakizimana"
+                                        placeholder="Bizimana Eric"
                                         autoComplete="name"
                                         required
                                     />
@@ -133,7 +133,7 @@ export default function Signup() {
                                         name="email"
                                         value={form.email}
                                         onChange={handleChange}
-                                        placeholder="jean@example.rw"
+                                        placeholder="ericbizimana111@gmail.com"
                                         autoComplete="email"
                                         required
                                     />
@@ -197,9 +197,8 @@ export default function Signup() {
                                         {showPass ? '🙈' : '👁️'}
                                     </button>
                                 </div>
-                                {form.password && (
-                                    <StrengthBar password={form.password} />
-                                )}
+                                {form.password && ( <StrengthBar password={form.password} />)}
+                                
                             </div>
 
                             <div className={styles.field}>

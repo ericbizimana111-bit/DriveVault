@@ -15,6 +15,10 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
+
+
+
+
   useEffect(() => {
     const checkAuth = async () => {
       if (!token) {
@@ -41,6 +45,14 @@ export function AuthProvider({ children }) {
     checkAuth();
   }, [token, logout]);
 
+
+
+
+
+
+
+
+
   const fetchMe = useCallback(async () => {
     try {
       const res = await fetch(`${API}/auth/me`, {
@@ -59,6 +71,15 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }, [API, token, logout]);
+
+
+
+
+
+
+
+
+
 
   const login = useCallback(async (email, password) => {
     const res = await fetch(`${API}/auth/login`, {
