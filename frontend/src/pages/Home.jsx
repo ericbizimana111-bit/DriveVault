@@ -27,37 +27,37 @@ const heroSlides = [
 
 const features = [
   {
-    icon: '📄',
+
     title: 'Digital Documents',
     desc: 'All your driving documents stored securely online, accessible anywhere, anytime.',
     img: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&q=80',
   },
   {
-    icon: '⏰',
+    icon: '',
     title: 'Expiry Alerts',
     desc: 'Never miss a renewal. Get clear countdowns for every document before it expires.',
     img: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&q=80',
   },
   {
-    icon: '💳',
+    icon: '',
     title: 'Easy Payments',
     desc: 'Unique payment codes for each document renewal. Pay quickly without confusion.',
     img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80',
   },
   {
-    icon: '🛡️',
+    icon: '',
     title: 'Police Verified',
     desc: 'Documents are verified and added by Rwanda National Police administrators only.',
     img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600&q=80',
   },
   {
-    icon: '📸',
+    icon: '',
     title: 'Photo Confirmation',
     desc: 'Each document includes your photo for identity confirmation and fraud prevention.',
     img: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80',
   },
   {
-    icon: '🔒',
+    icon: '',
     title: 'Secure Access',
     desc: 'Only you can view your portfolio. Accounts created by admin, no self-registration.',
     img: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=600&q=80',
@@ -65,7 +65,7 @@ const features = [
 ];
 
 const docTypes = [
-  { code: 'A / A1', label: 'Motorcycle & 3-Wheeler', desc: 'Motorcycles, 3-wheelers up to 350kg', img: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500&q=80' },
+  { code: 'A / A1', label: 'Motorcycle & 3-Wheeler', desc: 'Motorcycles, 3-wheelers up to 350kg , for the motocyclists', img: 'https://images.unsplash.com/photo-1609630875171-b1321377ee65?w=500&q=80' },
   { code: 'B', label: 'Standard Passenger Vehicle', desc: 'Up to 8 seats, max 3,500kg — most common', img: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=500&q=80' },
   { code: 'B1', label: 'Passenger Bus', desc: 'Passenger vehicles with 8+ seats, up to 5,000kg', img: 'https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=500&q=80' },
   { code: 'B2', label: 'Light Goods Vehicle', desc: 'Goods-carrying vehicles up to 3,500kg', img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=500&q=80' },
@@ -153,7 +153,11 @@ export default function Home() {
         {heroSlides.map((s, i) => (
           <div
             key={i}
-            className={`${styles.slide} ${i === slideIndex ? styles.slideActive : ''}`}
+            className={`
+                      ${styles.slide}
+                      ${i === slideIndex ? styles.slideActive : ''}
+                      ${slideDir === 'next' ? styles.slideNext : styles.slidePrev}
+`}
           >
             <img src={s.url} alt="" className={styles.slideBg} />
             <div className={styles.slideGradient} />
@@ -230,7 +234,7 @@ export default function Home() {
                   <div className={styles.featureImgWrap}>
                     <img src={f.img} alt={f.title} className={styles.featureImg} />
                     <div className={styles.featureImgOverlay} />
-                    <span className={styles.featureIconBadge}>{f.icon}</span>
+
                   </div>
                   <div className={styles.featureBody}>
                     <h3 className={styles.featureTitle}>{f.title}</h3>
