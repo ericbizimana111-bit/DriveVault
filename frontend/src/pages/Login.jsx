@@ -14,7 +14,7 @@ export default function Login() {
 
   // Redirect if already logged in
   React.useEffect(() => {
-    if (user) navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+    if (user) navigate(user.role === 'admin' ? '/admin' : '/driver-dashboard');
   }, [user]);
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,10 +25,21 @@ export default function Login() {
     setLoading(true);
     try {
       const u = await login(form.email, form.password);
+
       toast.success(`Welcome back, ${u.name.split(' ')[0]}!`);
-      navigate(u.role === 'admin' ? '/admin' : '/dashboard');
+
+      if (u.role === 'admin') {
+        navigate('/admin');
+      } else if (u.role === 'user') {
+        navigate('/driver-dashboard');
+      } else {
+        navigate('/');
+      }
+
+
     } catch (err) {
       toast.error(err.message || 'Login failed. Check your credentials.');
+
     } finally {
       setLoading(false);
     }
@@ -94,7 +105,7 @@ export default function Login() {
               </div>
             </div>
 
-            <button type="submit" className={styles.submitBtn} disabled={loading} onClick={() => navigate('/dashboard')}>
+            <button type="submit" className={styles.submitBtn} disabled={loading} >
               {loading ? 'Signing in...' : 'Sign In →'}
             </button>
           </form>
@@ -103,7 +114,7 @@ export default function Login() {
             <p>🔒 Accounts are created by Rwanda National Police administrators only. If you don't have an account, contact your nearest RNP office.</p>
           </div>
           <p className={styles.signup}>Dont have an account? <span onClick={() => navigate('/signup')}>Sign Up </span></p>
-          
+
         </div>
       </div>
     </div>

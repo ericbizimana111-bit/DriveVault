@@ -21,7 +21,7 @@ export default function ProtectedRoute({ role }) {
 
   if (role && user.role !== role) {
     if (user.role === 'admin') return <Navigate to="/admin" replace />;
-    if (user.role === 'driver') return <Navigate to="/dashboard" replace />;
+    if (user.role === 'user') return <Navigate to="/driver-dashboard" replace />;
     return <Navigate to="/" replace />;
   }
 

@@ -1,8 +1,10 @@
 
+import { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 import styles from './DriverProfile.module.css';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const LICENSE_INFO = {
   A: { label: 'Motorcycle', vehicles: 'L1, L2, L3, L4, L5, L6', color: '#e67e22' },
@@ -15,9 +17,51 @@ const LICENSE_INFO = {
 };
 
 export default function DriverProfile() {
-  const { user } = useAuth();
+  const { user, token, API } = useAuth();
   const cat = user?.licenseCategory || 'B';
   const licenseInfo = LICENSE_INFO[cat] || LICENSE_INFO['B'];
+  const photoRef = useRef();
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
+
+  const handlePhotoSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setPhotoPreview(URL.createObjectURL(file));
+  };
+
+  const handlePhotoUpload = async () => {
+    const file = photoRef.current?.files[0];
+    if (!file) {
+      toast.error('Please select a photo');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      const res = await fetch(`${API}/drivers/${user.id}/profile`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Upload failed');
+
+      toast.success('Profile photo updated successfully');
+      setPhotoPreview(null);
+      if (photoRef.current) photoRef.current.value = '';
+      // Refresh page or update user context
+      window.location.reload();
+    } catch (err) {
+      toast.error(err.message || 'Failed to upload photo');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -27,17 +71,46 @@ export default function DriverProfile() {
       </div>
 
       <div className={styles.grid}>
-        {/* Profile Card */}
+        {/* Profile Card with Photo Upload */}
         <div className={styles.card}>
           <div className={styles.profileTop}>
             <div className={styles.avatar}>
-              {user?.photo
-                ? <img src={`${API_BASE}${user.photo}`} alt="profile" />
-                : <span>{user?.name?.charAt(0)?.toUpperCase()}</span>
-              }
+              {photoPreview ? (
+                <img src={photoPreview} alt="preview" />
+              ) : user?.photo ? (
+                <img src={`${API_BASE}${user.photo}`} alt="profile" />
+              ) : (
+                <span>{user?.name?.charAt(0)?.toUpperCase()}</span>
+              )}
             </div>
             <div className={styles.profileName}>{user?.name}</div>
             <div className={styles.profileRole}>Licensed Driver</div>
+          </div>
+          <div className={styles.divider} />
+          <div className={styles.photoUploadSection}>
+            <label className={styles.uploadLabel}>Upload Profile Photo</label>
+            <input
+              ref={photoRef}
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoSelect}
+              style={{ display: 'none' }}
+            />
+            <button
+              className={styles.selectPhotoBtn}
+              onClick={() => photoRef.current?.click()}
+            >
+              📷 Select Photo
+            </button>
+            {photoPreview && (
+              <button
+                className={styles.uploadPhotoBtn}
+                onClick={handlePhotoUpload}
+                disabled={uploading}
+              >
+                {uploading ? 'Uploading...' : '✓ Upload Photo'}
+              </button>
+            )}
           </div>
           <div className={styles.divider} />
           <div className={styles.details}>
@@ -49,7 +122,7 @@ export default function DriverProfile() {
             <div className={styles.detail}><span>Registered</span><strong>{user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</strong></div>
           </div>
           <div className={styles.infoNote}>
-            To update your information, contact your nearest Rwanda National Police office.
+            To update other information, contact your nearest Rwanda National Police office.
           </div>
         </div>
 

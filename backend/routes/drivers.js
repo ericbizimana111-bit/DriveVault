@@ -38,6 +38,29 @@ module.exports = (db) => {
     res.json(safe);
   });
 
+  // Update driver profile (driver can update own, admin can update any)
+  router.put('/:id/profile', auth, upload.single('photo'), async (req, res) => {
+    try {
+      // Check authorization
+      if (req.user.role !== 'admin' && req.user.id !== req.params.id) {
+        return res.status(403).json({ message: 'Access denied' });
+      }
+
+      const idx = db.drivers.findIndex(d => d.id === req.params.id);
+      if (idx === -1) return res.status(404).json({ message: 'Driver not found' });
+
+      const updates = { ...req.body };
+      if (req.file) updates.photo = `/uploads/${req.file.filename}`;
+      if (updates.password) updates.password = await bcrypt.hash(updates.password, 10);
+
+      db.drivers[idx] = { ...db.drivers[idx], ...updates };
+      const { password, ...safe } = db.drivers[idx];
+      res.json(safe);
+    } catch (err) {
+      res.status(500).json({ message: 'Server error', error: err.message });
+    }
+  });
+
   // Add driver (admin only)
   router.post('/', auth, adminOnly, upload.single('photo'), async (req, res) => {
     try {
@@ -58,7 +81,7 @@ module.exports = (db) => {
         dateOfBirth: dateOfBirth || '',
         address: address || '',
         photo: req.file ? `/uploads/${req.file.filename}` : null,
-        role: 'driver',
+        role: 'user',
         createdAt: new Date().toISOString()
       };
       db.drivers.push(driver);

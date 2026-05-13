@@ -5,6 +5,8 @@ import { useData } from '../context/DataContext';
 import { differenceInDays, parseISO } from 'date-fns';
 import styles from './DriverDashboard.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function ExpiryBadge({ expiryDate }) {
   if (!expiryDate) return <span className={styles.badgeNone}>No Expiry</span>;
   const days = differenceInDays(parseISO(expiryDate), new Date());
@@ -122,7 +124,7 @@ export default function DriverDashboard() {
             <div className={styles.profileLeft}>
               <div className={styles.avatar}>
                 {user.photo
-                  ? <img src={`http://localhost:5000${user.photo}`} alt="profile" />
+                  ? <img src={`${API_BASE}${user.photo}`} alt="profile" />
                   : <span>{user.name?.charAt(0)?.toUpperCase()}</span>
                 }
               </div>

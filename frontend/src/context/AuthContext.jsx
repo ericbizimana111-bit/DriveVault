@@ -98,8 +98,24 @@ export function AuthProvider({ children }) {
     return data.user;
   }, [API]);
 
+  const register = useCallback(async (payload) => {
+    const res = await fetch(`${API}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Registration failed');
+
+    localStorage.setItem('rwd_token', data.token);
+    setToken(data.token);
+    setUser(data.user);
+    return data.user;
+  }, [API]);
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, API }}>
+    <AuthContext.Provider value={{ user, token, login, register, logout, loading, API }}>
       {children}
     </AuthContext.Provider>
   );

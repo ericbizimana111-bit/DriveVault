@@ -21,7 +21,7 @@ export default function Signup() {
     });
 
     React.useEffect(() => {
-        if (user) navigate(user.role === 'admin' ? '/admin' : '/dashboard');
+        if (user) navigate(user.role === 'admin' ? '/admin' : '/driver-dashboard');
     }, [user]);
 
     const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -52,7 +52,7 @@ export default function Signup() {
         try {
             const u = await register(form);
             toast.success(`Welcome, ${u.name.split(' ')[0]}! Your account is pending verification.`);
-            navigate('/dashboard');
+            navigate('/driver-dashboard');
         } catch (err) {
             toast.error(err.message || 'Registration failed. Please try again.');
         } finally {
@@ -111,7 +111,7 @@ export default function Signup() {
                             <div className={styles.field}>
                                 <label>Full Name</label>
                                 <div className={styles.inputWrap}>
-                                    <span className={styles.icon}>👤</span>
+
                                     <input
                                         type="text"
                                         name="name"
@@ -127,7 +127,7 @@ export default function Signup() {
                             <div className={styles.field}>
                                 <label>Email Address</label>
                                 <div className={styles.inputWrap}>
-                                    <span className={styles.icon}>✉️</span>
+
                                     <input
                                         type="email"
                                         name="email"
@@ -143,7 +143,7 @@ export default function Signup() {
                             <div className={styles.field}>
                                 <label>Phone Number</label>
                                 <div className={styles.inputWrap}>
-                                    <span className={styles.icon}>📱</span>
+
                                     <input
                                         type="tel"
                                         name="phone"
@@ -168,7 +168,7 @@ export default function Signup() {
                             <div className={styles.field}>
                                 <label>National ID Number</label>
                                 <div className={styles.inputWrap}>
-                                    <span className={styles.icon}>🪪</span>
+                                    <span className={styles.icon}></span>
                                     <input
                                         type="text"
                                         name="nationalId"
@@ -183,7 +183,7 @@ export default function Signup() {
                             <div className={styles.field}>
                                 <label>Password</label>
                                 <div className={styles.passWrap}>
-                                    <span className={styles.icon}>🔑</span>
+                                    <span className={styles.icon}></span>
                                     <input
                                         type={showPass ? 'text' : 'password'}
                                         name="password"
@@ -197,14 +197,14 @@ export default function Signup() {
                                         {showPass ? '🙈' : '👁️'}
                                     </button>
                                 </div>
-                                {form.password && ( <StrengthBar password={form.password} />)}
-                                
+                                {form.password && (<StrengthBar password={form.password} />)}
+
                             </div>
 
                             <div className={styles.field}>
                                 <label>Confirm Password</label>
                                 <div className={styles.passWrap}>
-                                    <span className={styles.icon}>🔒</span>
+
                                     <input
                                         type={showConfirm ? 'text' : 'password'}
                                         name="confirm"

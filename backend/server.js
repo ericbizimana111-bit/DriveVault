@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -25,6 +24,15 @@ const db = {
       email: 'admin@rwandadrive.rw',
       password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
       role: 'admin',
+      createdAt: new Date().toISOString()
+    },
+
+    {
+      id: 'user-001',
+      name: 'user1',
+      email: 'user1@gmail.com',
+      password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+      role: 'user',
       createdAt: new Date().toISOString()
     }
   ],
@@ -46,6 +54,26 @@ app.use('/api/documents', docRouter);
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Rwanda Drive API running' }));
+
+// Serve static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Serve admin app
+app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
+
+// Serve frontend app for all other routes
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+// SPA fallback handlers - must be middleware, not routes
+app.use('/admin', (req, res, next) => {
+  // For /admin routes, serve admin SPA
+  res.sendFile(path.join(__dirname, '../admin/dist/index.html'));
+});
+
+// Catch-all handler for frontend
+app.use((req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+});
 
 app.listen(PORT, () => {
   console.log(`🚗 Rwanda Drive Backend running on port ${PORT}`);

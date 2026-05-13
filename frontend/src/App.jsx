@@ -39,9 +39,9 @@ export default function App() {
             </Route>
 
             {/* Driver Routes */}
-            <Route element={<ProtectedRoute role="driver" />}>
+            <Route element={<ProtectedRoute role="user" />}>
               <Route element={<DriverLayout />}>
-                <Route path="/dashboard" element={<DriverDashboard />} />
+                <Route path="/driver-dashboard" element={<DriverDashboard />} />
                 <Route path="/my-documents" element={<DriverDocuments />} />
                 <Route path="/profile" element={<DriverProfile />} />
               </Route>

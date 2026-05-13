@@ -5,7 +5,7 @@ import { differenceInDays, parseISO, format } from 'date-fns';
 import { useData } from '../context/DataContext';
 import styles from './AdminDocuments.module.css';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function ExpiryBadge({ expiryDate }) {
   if (!expiryDate) return <span className={`${styles.badge} ${styles.badgeNone}`}>No Expiry</span>;

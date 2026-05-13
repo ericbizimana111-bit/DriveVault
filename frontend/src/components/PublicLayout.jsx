@@ -15,7 +15,7 @@ export default function PublicLayout() {
     navigate('/');
   };
 
- 
+
   const hideLayout =
     location.pathname === '/login' ||
     location.pathname === '/signup';
@@ -50,13 +50,6 @@ export default function PublicLayout() {
               {!user ? (
                 <>
                   <button
-                    className={styles.signupBtn}
-                    onClick={() => navigate('/signup')}
-                  >
-                    Sign Up
-                  </button>
-
-                  <button
                     className={styles.loginBtn}
                     onClick={() => navigate('/login')}
                   >
@@ -65,18 +58,12 @@ export default function PublicLayout() {
                 </>
               ) : (
                 <>
-                  <button
-                    className={styles.dashBtn}
-                    onClick={() =>
-                      navigate(user.role === 'admin' ? '/admin' : '/dashboard')
-                    }
-                  >
-                    Dashboard
-                  </button>
+
 
                   <button
                     className={styles.logoutBtn}
                     onClick={handleLogout}
+                    
                   >
                     Logout
                   </button>

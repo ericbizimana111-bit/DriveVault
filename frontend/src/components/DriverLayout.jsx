@@ -1,4 +1,4 @@
-import  { useState } from 'react';
+import { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './DriverLayout.module.css';
@@ -27,7 +27,7 @@ export default function DriverLayout() {
           <div className={styles.profile}>
             <div className={styles.avatar}>
               {user?.photo
-                ? <img src={`http://localhost:5000${user.photo}`} alt="avatar" />
+                ? <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.photo}`} alt="avatar" />
                 : <span>{user?.name?.charAt(0)?.toUpperCase()}</span>
               }
             </div>
@@ -39,7 +39,7 @@ export default function DriverLayout() {
         )}
 
         <nav className={styles.nav}>
-          <NavLink to="/dashboard" end className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
+          <NavLink to="/driver-dashboard" end className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
             <span className={styles.navIcon}>📊</span>
             {!collapsed && <span>Dashboard</span>}
           </NavLink>

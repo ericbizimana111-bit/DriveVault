@@ -4,8 +4,6 @@ import { toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
 import styles from './AdminAddDocument.module.css';
 
-const API_BASE = 'http://localhost:5000';
-
 const DOC_TYPES = [
   'Driving License',
   'Vehicle Registration (Carte Jaune)',

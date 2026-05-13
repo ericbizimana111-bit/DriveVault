@@ -4,7 +4,7 @@ import { useData } from '../context/DataContext';
 import { differenceInDays, parseISO, format } from 'date-fns';
 import styles from './DriverDocuments.module.css';
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function CountdownTimer({ expiryDate }) {
   if (!expiryDate) return <div className={styles.noExpiry}>No expiry date</div>;

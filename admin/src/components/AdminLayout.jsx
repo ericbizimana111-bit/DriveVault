@@ -14,7 +14,10 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
-  const handleLogout = () => { logout(); navigate('/'); };
+  const handleLogout = () => {
+    logout();
+    navigate('/admin/login');
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -38,7 +41,7 @@ export default function AdminLayout() {
           <div className={styles.profile}>
             <div className={styles.avatar}>
               {user?.photo
-                ? <img src={`http://localhost:5000${user.photo}`} alt="avatar" />
+                ? <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.photo}`} alt="avatar" />
                 : <span>{user?.name?.charAt(0)?.toUpperCase()}</span>
               }
             </div>
