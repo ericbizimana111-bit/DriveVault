@@ -11,11 +11,6 @@ export default function AdminLogin() {
     const [loading, setLoading] = useState(false);
     const [showPass, setShowPass] = useState(false);
 
-    React.useEffect(() => {
-        if (user && user.role === 'admin') {
-            navigate('/admin');
-        }
-    }, [user, navigate]);
 
     const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
