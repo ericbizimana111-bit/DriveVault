@@ -1,8 +1,27 @@
-.page { display: flex; flex-direction: column; gap: 22px; }
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
 
-.pageHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; }
-.pageHeader h1 { font-size: 1.5rem; font-weight: 700; color: var(--primary); margin-bottom: 4px; }
-.pageHeader p { color: var(--text-muted); font-size: 0.9rem; }
+.pageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.pageHeader h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.pageHeader p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
 
 .addBtn {
   background: var(--primary);
@@ -16,7 +35,10 @@
   white-space: nowrap;
   transition: all 0.2s;
 }
-.addBtn:hover { background: var(--primary-light); }
+
+.addBtn:hover {
+  background: var(--primary-light);
+}
 
 .searchBar {
   display: flex;
@@ -28,8 +50,15 @@
   padding: 0 14px;
   transition: border-color 0.2s;
 }
-.searchBar:focus-within { border-color: var(--primary); }
-.searchIcon { font-size: 0.9rem; color: var(--text-muted); }
+
+.searchBar:focus-within {
+  border-color: var(--primary);
+}
+
+.searchIcon {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
 
 .searchBar input {
   flex: 1;
@@ -42,9 +71,18 @@
   font-family: inherit;
 }
 
-.clearBtn { background: none; border: none; color: var(--text-muted); font-size: 0.9rem; }
+.clearBtn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
 
-.loading { text-align: center; color: var(--text-muted); padding: 60px; }
+.loading {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 60px;
+}
 
 .empty {
   text-align: center;
@@ -59,7 +97,11 @@
   border-radius: 16px;
   border: 1px solid var(--border);
 }
-.empty p { font-size: 0.95rem; }
+
+.empty p {
+  font-size: 0.95rem;
+}
+
 .empty button {
   background: var(--accent);
   color: var(--primary);
@@ -78,9 +120,15 @@
   overflow: hidden;
 }
 
-.table { width: 100%; border-collapse: collapse; }
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
 
-.table thead { background: #f8faf8; }
+.table thead {
+  background: #f8faf8;
+}
+
 .table th {
   text-align: left;
   padding: 14px 16px;
@@ -99,24 +147,56 @@
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
 }
-.table tbody tr:last-child td { border: none; }
-.table tbody tr:hover { background: #f8faf8; }
 
-.driverCell { display: flex; align-items: center; gap: 12px; }
+.table tbody tr:last-child td {
+  border: none;
+}
+
+.table tbody tr:hover {
+  background: #f8faf8;
+}
+
+.driverCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
 .avatar {
-  width: 38px; height: 38px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: var(--primary);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
   flex-shrink: 0;
 }
-.avatar img { width: 100%; height: 100%; object-fit: cover; }
-.avatar span { color: var(--accent); font-weight: 700; font-size: 0.9rem; }
 
-.driverCell strong { display: block; font-weight: 600; color: var(--primary); font-size: 0.9rem; }
-.driverCell span { font-size: 0.78rem; color: var(--text-muted); }
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar span {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.driverCell strong {
+  display: block;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+
+.driverCell span {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
 
 .table code {
   font-family: 'IBM Plex Mono', monospace;
@@ -137,12 +217,16 @@
   border-radius: 6px;
 }
 
-.actions { display: flex; gap: 8px; align-items: center; }
+.actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
 
 .docBtn {
-  background: rgba(232,160,32,0.12);
+  background: rgba(232, 160, 32, 0.12);
   color: var(--primary);
-  border: 1px solid rgba(232,160,32,0.3);
+  border: 1px solid rgba(232, 160, 32, 0.3);
   padding: 5px 12px;
   border-radius: 6px;
   font-size: 0.78rem;
@@ -150,7 +234,24 @@
   font-family: inherit;
   transition: all 0.2s;
 }
-.docBtn:hover { background: rgba(232,160,32,0.25); }
+
+.docBtn:hover {
+  background: rgba(232, 160, 32, 0.25);
+}
+
+.editBtn {
+  background: none;
+  border: 1px solid #d4dce6;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.editBtn:hover {
+  background: #e8f4fd;
+  border-color: #3498db;
+}
 
 .deleteBtn {
   background: none;
@@ -160,13 +261,20 @@
   font-size: 0.85rem;
   transition: all 0.2s;
 }
-.deleteBtn:hover { background: #fdecea; border-color: var(--danger); }
+
+.deleteBtn:hover {
+  background: #fdecea;
+  border-color: var(--danger);
+}
 
 /* MODAL */
 .modalOverlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: flex; align-items: center; justify-content: center;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 200;
 }
 
@@ -179,11 +287,30 @@
   text-align: center;
 }
 
-.modalIcon { font-size: 2.5rem; margin-bottom: 16px; }
-.modal h3 { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-bottom: 10px; }
-.modal p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; margin-bottom: 28px; }
+.modalIcon {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
 
-.modalActions { display: flex; gap: 12px; justify-content: center; }
+.modal h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.modal p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
 
 .cancelBtn {
   background: var(--bg);
@@ -195,7 +322,10 @@
   font-family: inherit;
   transition: all 0.2s;
 }
-.cancelBtn:hover { border-color: var(--primary); }
+
+.cancelBtn:hover {
+  border-color: var(--primary);
+}
 
 .confirmDeleteBtn {
   background: var(--danger);
@@ -207,4 +337,7 @@
   font-family: inherit;
   transition: all 0.2s;
 }
-.confirmDeleteBtn:hover { opacity: 0.85; }
+
+.confirmDeleteBtn:hover {
+  opacity: 0.85;
+}

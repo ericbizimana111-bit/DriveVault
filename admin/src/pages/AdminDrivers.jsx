@@ -101,6 +101,13 @@ export default function AdminDrivers() {
                   <td>
                     <div className={styles.actions}>
                       <button
+                        className={styles.editBtn}
+                        onClick={() => navigate(`/admin/drivers/${driver.id}/edit`)}
+                        title="Edit Driver"
+                      >
+                        ✏️
+                      </button>
+                      <button
                         className={styles.docBtn}
                         onClick={() => navigate(`/admin/documents/add?driverId=${driver.id}&driverName=${encodeURIComponent(driver.name)}`)}
                         title="Add Document"

@@ -4,6 +4,8 @@ import { useData } from '../context/DataContext';
 import { differenceInDays, parseISO } from 'date-fns';
 import styles from './AdminDashboard.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 export default function AdminDashboard() {
   const { drivers, documents, fetchDrivers, fetchDocuments, loading } = useData();
   const navigate = useNavigate();

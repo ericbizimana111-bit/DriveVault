@@ -58,20 +58,17 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok', message: 'Rwanda D
 // Serve static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Serve admin app
-app.use('/admin', express.static(path.join(__dirname, '../admin/dist')));
-
-// Serve frontend app for all other routes
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-// SPA fallback handlers - must be middleware, not routes
-app.use('/admin', (req, res, next) => {
-  // For /admin routes, serve admin SPA
+// Serve admin SPA at /admin route with fallback for nested routes
+app.use('/admin', express.static(path.join(__dirname, '../admin/dist'), { index: false }));
+app.get(/^\/admin/, (req, res) => {
   res.sendFile(path.join(__dirname, '../admin/dist/index.html'));
 });
 
-// Catch-all handler for frontend
-app.use((req, res) => {
+// Serve frontend app
+app.use(express.static(path.join(__dirname, '../frontend/dist'), { index: false }));
+
+// Catch-all handler for frontend SPA
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
