@@ -14,6 +14,13 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-userSchema.index({ nationalId: 1 }, { unique: true, sparse: true });
+userSchema.index(
+    { nationalId: 1 },
+    {
+        unique: true,
+        sparse: true,
+        name: 'nationalId_unique_index'
+    }
+);
 
 module.exports = mongoose.model('User', userSchema);
