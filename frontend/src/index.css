@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
   --primary: #1a3a2a;
@@ -23,7 +24,7 @@
 }
 
 body {
-  font-family: 'Sora', sans-serif;
+  font-family:'poppins' ;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -36,13 +37,13 @@ a {
 
 button {
   cursor: pointer;
-  font-family: inherit;
+  font-family: 'poppins';
 }
 
 input,
 select,
 textarea {
-  font-family: inherit;
+  font-family: 'poppins';
   outline: none;
 }
 
@@ -62,11 +63,11 @@ textarea {
 
 /* Utility */
 .mono {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'poppins';
 }
 
 /* Toastify override */
 .Toastify__toast {
-  font-family: 'Sora', sans-serif;
+  font-family: 'poppins';
   border-radius: 8px;
 }
