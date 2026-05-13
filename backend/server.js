@@ -3,9 +3,24 @@ const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
+const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || process.env.MONGO_URL;
+
+if (!MONGO_URI) {
+  console.error('Missing MONGO_URI in environment. Please set it in backend/.env');
+  process.exit(1);
+}
+
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB Connected'))
+  .catch(err => {
+    console.error('DB Error:', err);
+    process.exit(1);
+  });
 
 // Middleware
 app.use(cors());
@@ -15,41 +30,13 @@ app.use(express.json());
 const uploadsDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
-// In-memory data store (replace with a real DB in production)
-const db = {
-  users: [
-    {
-      id: 'admin-001',
-      name: 'System Administrator',
-      email: 'admin@rwandadrive.rw',
-      password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-      role: 'admin',
-      createdAt: new Date().toISOString()
-    },
+// Routes
+const authRouter = require('./routes/auth');
+const driverRouter = require('./routes/drivers');
+const docRouter = require('./routes/documents');
 
-    {
-      id: 'user-001',
-      name: 'user1',
-      email: 'user1@gmail.com',
-      password: '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-      role: 'user',
-      createdAt: new Date().toISOString()
-    }
-  ],
-  drivers: [],
-  documents: []
-};
-
-// ========== Auth Routes ==========
-const authRouter = require('./routes/auth')(db);
 app.use('/api/auth', authRouter);
-
-// ========== Driver Routes ==========
-const driverRouter = require('./routes/drivers')(db);
 app.use('/api/drivers', driverRouter);
-
-// ========== Document Routes ==========
-const docRouter = require('./routes/documents')(db);
 app.use('/api/documents', docRouter);
 
 // Health check
