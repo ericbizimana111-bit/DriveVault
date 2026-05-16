@@ -7,6 +7,7 @@ import styles from './AdminAddDriver.module.css';
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const LICENSE_CATEGORIES = ['A', 'A1', 'B', 'B1', 'B2', 'C', 'D'];
+const getId = item => item?.id || item?._id;
 
 export default function AdminEditDriver() {
     const { id } = useParams();

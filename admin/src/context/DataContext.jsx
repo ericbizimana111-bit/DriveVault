@@ -14,14 +14,18 @@ export function DataProvider({ children }) {
   }), [token]);
 
   // ===== DRIVERS =====
+  const normalize = (item) => ({ ...item, id: item.id || item._id });
+
   const fetchDrivers = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`${API}/drivers`, { headers: authHeaders() });
       if (!res.ok) throw new Error('Failed to fetch drivers');
       const data = await res.json();
-      setDrivers(data);
-    } catch (e) { console.error(e); }
+      const normalized = Array.isArray(data) ? data.map(normalize) : normalize(data);
+      setDrivers(normalized);
+      return normalized;
+    } catch (e) { console.error(e); return []; }
     finally { setLoading(false); }
   }, [API, authHeaders]);
 
@@ -65,8 +69,10 @@ export function DataProvider({ children }) {
       const res = await fetch(`${API}/documents`, { headers: authHeaders() });
       if (!res.ok) throw new Error('Failed to fetch documents');
       const data = await res.json();
-      setDocuments(data);
-    } catch (e) { console.error(e); }
+      const normalized = Array.isArray(data) ? data.map(normalize) : normalize(data);
+      setDocuments(normalized);
+      return normalized;
+    } catch (e) { console.error(e); return []; }
     finally { setLoading(false); }
   }, [API, authHeaders]);
 
@@ -74,7 +80,7 @@ export function DataProvider({ children }) {
     const res = await fetch(`${API}/documents/driver/${driverId}`, { headers: authHeaders() });
     if (!res.ok) throw new Error('Failed to fetch driver documents');
     const data = await res.json();
-    return data;
+    return Array.isArray(data) ? data.map(normalize) : normalize(data);
   }, [API, authHeaders]);
 
   const addDocument = useCallback(async (formData) => {
@@ -85,8 +91,9 @@ export function DataProvider({ children }) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
-    setDocuments(prev => [...prev, data]);
-    return data;
+    const normalized = normalize(data);
+    setDocuments(prev => [...prev, normalized]);
+    return normalized;
   }, [API, authHeaders]);
 
   const deleteDocument = useCallback(async (id) => {
