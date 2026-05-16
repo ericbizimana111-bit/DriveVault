@@ -18,7 +18,7 @@ if (!MONGO_URI) {
 
 const seedAdminUser = async () => {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@rwandadrive.rw';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin@123';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@123';
   const adminName = process.env.ADMIN_NAME || 'System Administrator';
 
   const existingAdmin = await User.findOne({ role: 'admin' });

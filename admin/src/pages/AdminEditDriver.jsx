@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
@@ -32,28 +32,33 @@ export default function AdminEditDriver() {
     useEffect(() => {
         const loadDriver = async () => {
             setLoading(true);
-            const fetchedDrivers = await fetchDrivers();
-            const list = fetchedDrivers.length ? fetchedDrivers : drivers;
-            const driver = list.find(d => getId(d) === id);
-            if (driver) {
-                setForm({
-                    name: driver.name || '',
-                    email: driver.email || '',
-                    phone: driver.phone || '',
-                    nationalId: driver.nationalId || '',
-                    licenseCategory: driver.licenseCategory || 'B',
-                    dateOfBirth: driver.dateOfBirth || '',
-                    address: driver.address || ''
-                });
-                if (driver.photo) {
-                    setPhotoPreview(`${API_BASE}${driver.photo}`);
+            try {
+                const fetchedDrivers = await fetchDrivers();
+                const list = fetchedDrivers.length ? fetchedDrivers : drivers;
+                const driver = list.find(d => getId(d) === id);
+                if (driver) {
+                    setForm({
+                        name: driver.name || '',
+                        email: driver.email || '',
+                        phone: driver.phone || '',
+                        nationalId: driver.nationalId || '',
+                        licenseCategory: driver.licenseCategory || 'B',
+                        dateOfBirth: driver.dateOfBirth || '',
+                        address: driver.address || ''
+                    });
+                    if (driver.photo) {
+                        setPhotoPreview(`${API_BASE}${driver.photo}`);
+                    }
                 }
+            } catch (error) {
+                console.error('Failed to load driver:', error);
+            } finally {
+                setLoading(false);
             }
-            setLoading(false);
         };
 
         loadDriver();
-    }, [id, fetchDrivers, drivers]);
+    }, [id, fetchDrivers]);
 
     const handleChange = (e) => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
