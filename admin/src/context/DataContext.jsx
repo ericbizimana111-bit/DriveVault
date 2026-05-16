@@ -13,8 +13,10 @@ export function DataProvider({ children }) {
     Authorization: `Bearer ${token}`,
   }), [token]);
 
+  const getId = item => item?.id || item?._id;
+
   // ===== DRIVERS =====
-  const normalize = (item) => ({ ...item, id: item.id || item._id });
+  const normalize = (item) => ({ ...item, id: getId(item) });
 
   const fetchDrivers = useCallback(async () => {
     setLoading(true);
@@ -37,8 +39,9 @@ export function DataProvider({ children }) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
-    setDrivers(prev => [...prev, data]);
-    return data;
+    const normalized = normalize(data);
+    setDrivers(prev => [...prev, normalized]);
+    return normalized;
   }, [API, authHeaders]);
 
   const updateDriver = useCallback(async (id, formData) => {
@@ -49,8 +52,9 @@ export function DataProvider({ children }) {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.message);
-    setDrivers(prev => prev.map(d => d.id === id ? data : d));
-    return data;
+    const normalized = normalize(data);
+    setDrivers(prev => prev.map(d => getId(d) === id ? normalized : d));
+    return normalized;
   }, [API, authHeaders]);
 
   const deleteDriver = useCallback(async (id) => {

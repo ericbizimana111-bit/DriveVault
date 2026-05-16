@@ -30,8 +30,11 @@ export default function AdminEditDriver() {
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
-        fetchDrivers().then(() => {
-            const driver = drivers.find(d => d.id === id);
+        const loadDriver = async () => {
+            setLoading(true);
+            const fetchedDrivers = await fetchDrivers();
+            const list = fetchedDrivers.length ? fetchedDrivers : drivers;
+            const driver = list.find(d => getId(d) === id);
             if (driver) {
                 setForm({
                     name: driver.name || '',
@@ -45,12 +48,12 @@ export default function AdminEditDriver() {
                 if (driver.photo) {
                     setPhotoPreview(`${API_BASE}${driver.photo}`);
                 }
-                setLoading(false);
-            } else {
-                setLoading(false);
             }
-        });
-    }, [id]);
+            setLoading(false);
+        };
+
+        loadDriver();
+    }, [id, fetchDrivers, drivers]);
 
     const handleChange = (e) => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -90,7 +93,7 @@ export default function AdminEditDriver() {
         return <div className={styles.page}><div className={styles.loading}>Loading driver...</div></div>;
     }
 
-    const driver = drivers.find(d => d.id === id);
+    const driver = drivers.find(d => getId(d) === id);
     if (!driver) {
         return <div className={styles.page}><div className={styles.empty}>Driver not found</div></div>;
     }

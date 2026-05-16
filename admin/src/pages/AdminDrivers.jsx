@@ -5,6 +5,7 @@ import { useData } from '../context/DataContext';
 import styles from './AdminDrivers.module.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const getId = item => item?.id || item?._id;
 
 export default function AdminDrivers() {
   const { drivers, fetchDrivers, deleteDriver, loading } = useData();
@@ -12,7 +13,7 @@ export default function AdminDrivers() {
   const [search, setSearch] = useState('');
   const [confirmId, setConfirmId] = useState(null);
 
-  useEffect(() => { fetchDrivers(); }, []);
+  useEffect(() => { fetchDrivers(); }, [fetchDrivers]);
 
   const filtered = drivers.filter(d =>
     d.name?.toLowerCase().includes(search.toLowerCase()) ||
@@ -102,21 +103,21 @@ export default function AdminDrivers() {
                     <div className={styles.actions}>
                       <button
                         className={styles.editBtn}
-                        onClick={() => navigate(`/admin/drivers/${driver.id}/edit`)}
+                        onClick={() => navigate(`/admin/drivers/${getId(driver)}/edit`)}
                         title="Edit Driver"
                       >
                         ✏️
                       </button>
                       <button
                         className={styles.docBtn}
-                        onClick={() => navigate(`/admin/documents/add?driverId=${driver.id}&driverName=${encodeURIComponent(driver.name)}`)}
+                        onClick={() => navigate(`/admin/documents/add?driverId=${getId(driver)}&driverName=${encodeURIComponent(driver.name)}`)}
                         title="Add Document"
                       >
                         + Doc
                       </button>
                       <button
                         className={styles.deleteBtn}
-                        onClick={() => setConfirmId(driver.id)}
+                        onClick={() => setConfirmId(getId(driver))}
                         title="Delete Driver"
                       >
                         🗑️
