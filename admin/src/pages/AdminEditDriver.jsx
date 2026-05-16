@@ -34,8 +34,7 @@ export default function AdminEditDriver() {
             setLoading(true);
             try {
                 const fetchedDrivers = await fetchDrivers();
-                const list = fetchedDrivers.length ? fetchedDrivers : drivers;
-                const driver = list.find(d => getId(d) === id);
+                const driver = fetchedDrivers.find(d => getId(d) === id);
                 if (driver) {
                     setForm({
                         name: driver.name || '',
