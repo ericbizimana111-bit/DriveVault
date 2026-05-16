@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
@@ -16,6 +16,9 @@ const DOC_TYPES = [
   'Rental Agreement'
 ];
 
+const getId = item => item?.id || item?._id;
+const makePaymentCode = () => `RWD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+
 export default function AdminAddDocument() {
   const { drivers, fetchDrivers, addDocument } = useData();
   const navigate = useNavigate();
@@ -25,20 +28,20 @@ export default function AdminAddDocument() {
   const prefillDriverId = searchParams.get('driverId') || '';
   const prefillDriverName = searchParams.get('driverName') || '';
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState(() => ({
     driverId: prefillDriverId,
     documentType: 'Driving License',
     documentNumber: '',
     issueDate: new Date().toISOString().split('T')[0],
     expiryDate: '',
     issuedBy: 'Rwanda National Police',
-    paymentCode: `RWD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
-  });
+    paymentCode: makePaymentCode()
+  }));
   const [photo, setPhoto] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => { fetchDrivers(); }, []);
+  useEffect(() => { fetchDrivers(); }, [fetchDrivers]);
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -73,7 +76,7 @@ export default function AdminAddDocument() {
     }
   };
 
-  const selectedDriver = drivers.find(d => d.id === form.driverId);
+  const selectedDriver = drivers.find(d => getId(d) === form.driverId);
 
   return (
     <div className={styles.page}>
@@ -114,18 +117,18 @@ export default function AdminAddDocument() {
           </div>
 
           {/* Driver Preview */}
-          {selectedDriver && (
+          {(selectedDriver || prefillDriverName) && (
             <div className={styles.driverPreview}>
               <div className={styles.driverPreviewAvatar}>
-                {selectedDriver.photo
-                  ? <img src={`${API_BASE}${selectedDriver.photo}`} alt={selectedDriver.name} />
-                  : <span>{selectedDriver.name?.charAt(0)?.toUpperCase()}</span>
+                {selectedDriver?.photo
+                  ? <img src={`${API_BASE}${selectedDriver.photo}`} alt={selectedDriver?.name} />
+                  : <span>{(selectedDriver?.name || prefillDriverName)?.charAt(0)?.toUpperCase()}</span>
                 }
               </div>
               <div>
-                <strong>{selectedDriver.name}</strong>
-                <span>{selectedDriver.email}</span>
-                <span className={styles.catTag}>{selectedDriver.licenseCategory || 'B'}</span>
+                <strong>{selectedDriver?.name || prefillDriverName}</strong>
+                {selectedDriver?.email && <span>{selectedDriver.email}</span>}
+                {selectedDriver && <span className={styles.catTag}>{selectedDriver.licenseCategory || 'B'}</span>}
               </div>
             </div>
           )}
@@ -146,9 +149,12 @@ export default function AdminAddDocument() {
                 <label>Driver</label>
                 <select name="driverId" value={form.driverId} onChange={handleChange} required>
                   <option value="">— Select a driver —</option>
-                  {drivers.map(d => (
-                    <option key={d.id} value={d.id}>{d.name} ({d.email})</option>
-                  ))}
+                  {drivers.map(d => {
+                    const driverId = getId(d);
+                    return (
+                      <option key={driverId} value={driverId}>{d.name} ({d.email})</option>
+                    );
+                  })}
                 </select>
               </div>
             )}

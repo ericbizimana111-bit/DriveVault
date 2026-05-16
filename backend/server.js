@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const User = require('./models/User');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -14,14 +16,40 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB Connected'))
+const seedAdminUser = async () => {
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@rwandadrive.rw';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin@123';
+  const adminName = process.env.ADMIN_NAME || 'System Administrator';
+
+  const existingAdmin = await User.findOne({ role: 'admin' });
+  if (existingAdmin) {
+    console.log('Admin user already exists:', existingAdmin.email);
+    return;
+  }
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
+  const admin = new User({
+    name: adminName,
+    email: adminEmail.toLowerCase().trim(),
+    password: hashedPassword,
+    role: 'admin'
+  });
+
+  await admin.save();
+  console.log(`Admin user created: ${adminEmail}`);
+};
+
+mongoose.connect(MONGO_URI)
+  .then(async () => {
+    console.log('MongoDB Connected');
+    await seedAdminUser();
+  })
   .catch(err => {
     console.error('DB Error:', err);
     process.exit(1);
   });
 
-  
+
 // Middleware
 app.use(cors());
 app.use(express.json());
