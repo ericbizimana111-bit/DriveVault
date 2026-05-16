@@ -17,7 +17,7 @@ const LICENSE_INFO = {
 };
 
 export default function DriverProfile() {
-  const { user, token, API } = useAuth();
+  const { user, token, API, fetchMe } = useAuth();
   const cat = user?.licenseCategory || 'B';
   const licenseInfo = LICENSE_INFO[cat] || LICENSE_INFO['B'];
   const photoRef = useRef();
