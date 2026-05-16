@@ -54,8 +54,8 @@ export default function DriverProfile() {
       toast.success('Profile photo updated successfully');
       setPhotoPreview(null);
       if (photoRef.current) photoRef.current.value = '';
-      // Refresh page or update user context
-      window.location.reload();
+      // Refresh user context
+      try { await fetchMe(); } catch (e) { /* ignore */ }
     } catch (err) {
       toast.error(err.message || 'Failed to upload photo');
     } finally {
