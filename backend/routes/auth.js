@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'rwanda_drive_secret_2024';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const router = express.Router();
 

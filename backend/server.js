@@ -16,33 +16,11 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-const seedAdminUser = async () => {
-  const adminEmail = process.env.ADMIN_EMAIL || 'admin@rwandadrive.rw';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@123';
-  const adminName = process.env.ADMIN_NAME || 'System Administrator';
 
-  const existingAdmin = await User.findOne({ role: 'admin' });
-  if (existingAdmin) {
-    console.log('Admin user already exists:', existingAdmin.email);
-    return;
-  }
-
-  const hashedPassword = await bcrypt.hash(adminPassword, 10);
-  const admin = new User({
-    name: adminName,
-    email: adminEmail.toLowerCase().trim(),
-    password: hashedPassword,
-    role: 'admin'
-  });
-
-  await admin.save();
-  console.log(`Admin user created: ${adminEmail}`);
-};
 
 mongoose.connect(MONGO_URI)
   .then(async () => {
     console.log('MongoDB Connected');
-    await seedAdminUser();
   })
   .catch(err => {
     console.error('DB Error:', err);
@@ -88,7 +66,7 @@ app.get(/.*/, (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🚗 Rwanda Drive Backend running on port ${PORT}`);
+  console.log(`Rwanda Drive Backend running on port ${PORT}`);
 });
 
 module.exports = app;

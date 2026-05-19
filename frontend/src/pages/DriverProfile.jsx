@@ -68,6 +68,7 @@ export default function DriverProfile() {
       <div className={styles.header}>
         <h1>My Profile</h1>
         <p>Your personal details and license information as registered by the administrator</p>
+        
       </div>
 
       <div className={styles.grid}>
@@ -100,7 +101,7 @@ export default function DriverProfile() {
               className={styles.selectPhotoBtn}
               onClick={() => photoRef.current?.click()}
             >
-              📷 Select Photo
+              Select Photo
             </button>
             {photoPreview && (
               <button
@@ -134,7 +135,7 @@ export default function DriverProfile() {
                 <div className={styles.licLabel}>License Category</div>
                 <div className={styles.licCode} style={{ color: licenseInfo.color }}>{cat}</div>
               </div>
-              <div className={styles.licIcon}>🪪</div>
+              
             </div>
             <div className={styles.licName}>{licenseInfo.label}</div>
             <div className={styles.licVehicles}>
@@ -165,12 +166,12 @@ export default function DriverProfile() {
       <div className={styles.card}>
         <h3 className={styles.cardTitle}>🇷🇼 Rwanda Road Rules Reminder</h3>
         <div className={styles.rulesGrid}>
-          <div className={styles.rule}><span>🚦</span><p>Speed: 40km/h in towns, 60–80km/h on highways</p></div>
-          <div className={styles.rule}><span>🍺</span><p>Blood alcohol limit: 0.08%</p></div>
-          <div className={styles.rule}><span>📱</span><p>No phone use without hands-free</p></div>
-          <div className={styles.rule}><span>🪑</span><p>Seatbelts mandatory for all</p></div>
-          <div className={styles.rule}><span>🚗</span><p>Drive on the right side of the road</p></div>
-          <div className={styles.rule}><span>🚷</span><p>No overtaking on the left</p></div>
+          <div className={styles.rule}><p>Speed: 40km/h in towns, 60–80km/h on highways</p></div>
+          <div className={styles.rule}><p>Blood alcohol limit: 0.08%</p></div>
+          <div className={styles.rule}><p>No phone use without hands-free</p></div>
+          <div className={styles.rule}><p>Seatbelts mandatory for all</p></div>
+          <div className={styles.rule}><p>Drive on the right side of the road</p></div>
+          <div className={styles.rule}><p>No overtaking on the left</p></div>
         </div>
       </div>
     </div>

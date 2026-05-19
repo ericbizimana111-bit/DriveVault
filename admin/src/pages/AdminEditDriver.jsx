@@ -63,7 +63,7 @@ export default function AdminEditDriver() {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handlePhoto = (e) => {
+    const handlePhoto = (e) => { 
         const file = e.target.files[0];
         if (!file) return;
         setPhoto(file);

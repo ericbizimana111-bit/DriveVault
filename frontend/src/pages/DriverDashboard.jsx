@@ -46,22 +46,18 @@ export default function DriverDashboard() {
       {/* Stats */}
       <div className={styles.statsRow}>
         <div className={styles.statCard}>
-          <div className={styles.statIcon}>📄</div>
           <div className={styles.statNum}>{docs.length}</div>
           <div className={styles.statLabel}>Total Documents</div>
         </div>
         <div className={`${styles.statCard} ${styles.statGreen}`}>
-          <div className={styles.statIcon}>✅</div>
           <div className={styles.statNum}>{valid.length}</div>
           <div className={styles.statLabel}>Valid Documents</div>
         </div>
         <div className={`${styles.statCard} ${styles.statOrange}`}>
-          <div className={styles.statIcon}>⚠️</div>
           <div className={styles.statNum}>{expiringSoon.length}</div>
           <div className={styles.statLabel}>Expiring Soon</div>
         </div>
         <div className={`${styles.statCard} ${styles.statRed}`}>
-          <div className={styles.statIcon}>🚫</div>
           <div className={styles.statNum}>{expired.length}</div>
           <div className={styles.statLabel}>Expired</div>
         </div>
@@ -70,12 +66,12 @@ export default function DriverDashboard() {
       {/* Alerts */}
       {expired.length > 0 && (
         <div className={styles.alert}>
-          <strong>⚠️ Action Required:</strong> You have {expired.length} expired document(s). Use your payment code to renew immediately.
+          <strong>Action Required:</strong> You have {expired.length} expired document(s). Use your payment code to renew immediately.
         </div>
       )}
       {expiringSoon.length > 0 && expired.length === 0 && (
         <div className={styles.alertWarning}>
-          <strong>🕐 Reminder:</strong> {expiringSoon.length} document(s) expire within 30 days. Plan your renewal now.
+          <strong>Reminder:</strong> {expiringSoon.length} document(s) expire within 30 days. Plan your renewal now.
         </div>
       )}
 

@@ -68,7 +68,7 @@ export default function DriverDocuments() {
             className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
             onClick={() => setFilter(f)}
           >
-            {f === 'all' ? 'All' : f === 'valid' ? '✅ Valid' : f === 'expiring' ? '⚠️ Expiring Soon' : '🚫 Expired'}
+            {f === 'all' ? 'All' : f === 'valid' ? ' Valid' : f === 'expiring' ? ' Expiring Soon' : ' Expired'}
           </button>
         ))}
       </div>
@@ -92,7 +92,7 @@ export default function DriverDocuments() {
               <div className={styles.docBody}>
                 <div className={styles.docTop}>
                   <div className={styles.docTypeWrap}>
-                    <span className={styles.docIcon}>📄</span>
+                    <span className={styles.docIcon}></span>
                     <span className={styles.docType}>{doc.documentType}</span>
                   </div>
                   <CountdownTimer expiryDate={doc.expiryDate} />

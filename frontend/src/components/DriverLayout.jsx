@@ -40,22 +40,22 @@ export default function DriverLayout() {
 
         <nav className={styles.nav}>
           <NavLink to="/driver-dashboard" end className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
-            <span className={styles.navIcon}>📊</span>
+           
             {!collapsed && <span>Dashboard</span>}
           </NavLink>
           <NavLink to="/my-documents" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
-            <span className={styles.navIcon}>📄</span>
+            
             {!collapsed && <span>My Documents</span>}
           </NavLink>
           <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
-            <span className={styles.navIcon}>👤</span>
+           
             {!collapsed && <span>My Profile</span>}
           </NavLink>
         </nav>
 
         <div className={styles.sidebarBottom}>
           <button className={styles.logoutBtn} onClick={handleLogout}>
-            <span>🚪</span>
+           
             {!collapsed && <span>Logout</span>}
           </button>
         </div>
