@@ -91,27 +91,7 @@ export default function PublicLayout() {
         <Outlet />
       </main>
 
-      {/* FOOTER */}
-      {!hideLayout && (
-        <footer className={styles.footer}>
-          <div className={styles.footerInner}>
-            <div
-              className={styles.footerLogo}
-              onClick={() => navigate('/')}
-            >
-              🚗 Rwanda DriveDoc
-            </div>
-
-            <p>
-              A service powered by Rwanda National Police & Transport Authority
-            </p>
-
-            <p className={styles.footerCopy}>
-              © {new Date().getFullYear()} Rwanda DriveDoc
-            </p>
-          </div>
-        </footer>
-      )}
+      
 
     </div>
   );

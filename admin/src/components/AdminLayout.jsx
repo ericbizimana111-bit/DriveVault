@@ -4,9 +4,9 @@ import { useAuth } from '../context/AuthContext';
 import styles from './AdminLayout.module.css';
 
 const navItems = [
-  { to: '/admin', icon: '📊', label: 'Dashboard', end: true },
-  { to: '/admin/drivers', icon: '👤', label: 'Drivers' },
-  { to: '/admin/documents', icon: '📄', label: 'Documents' },
+  { to: '/admin', icon: '', label: 'Dashboard', end: true },
+  { to: '/admin/drivers', icon: '', label: 'Drivers' },
+  { to: '/admin/documents', icon: '', label: 'Documents' },
 ];
 
 export default function AdminLayout() {
@@ -74,7 +74,7 @@ export default function AdminLayout() {
             </div>
           )}
           <button className={styles.logoutBtn} onClick={handleLogout}>
-            <span>🚪</span>
+            <span></span>
             {!collapsed && <span>Logout</span>}
           </button>
         </div>

@@ -111,7 +111,8 @@ export default function About() {
                 Rwanda is one of Africa's fastest-growing and cleanest countries, with a modern road network connecting Kigali to all provinces. The country drives on the right side of the road and enforces strict road safety laws.
               </p>
               <p style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.8, marginBottom: 16 }}>
-                Speed cameras are deployed widely across Kigali and on highways. The speed limit is <strong style={{ color: 'var(--accent)' }}>40 km/h</strong> in towns and <strong style={{ color: 'var(--accent)' }}>60–80 km/h</strong> on highways. Tourists from within the EAC region can drive using their home country license for up to 90 days.
+                Speed cameras are deployed widely across Kigali and on highways. The speed limit is <strong style={{ color: 'var(--accent)' }}>40 km/h</strong> in towns and <strong style={{ color: 'var(--accent)' }}>60–80 km/h
+                  </strong> on highways. Tourists from within the EAC region can drive using their home country license for up to 90 days.
               </p>
               <p style={{ color: 'rgba(255,255,255,0.75)', lineHeight: 1.8 }}>
                 Rwanda's Vision 2020 and 2050 plans include world-class physical infrastructure as a key development pillar — making road safety and proper licensing central to national progress.

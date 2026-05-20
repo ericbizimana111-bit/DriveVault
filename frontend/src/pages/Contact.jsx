@@ -2,10 +2,10 @@ import  { useState } from 'react';
 import styles from './Contact.module.css';
 
 const contacts = [
-  { icon: '📞', label: 'Phone', value: '+250 788 311 155', sub: 'Rwanda National Police (24/7)' },
-  { icon: '📧', label: 'Email', value: 'support@rwandadrive.rw', sub: 'Response within 24 hours' },
-  { icon: '📍', label: 'Office', value: 'KN 3 Ave, Kigali', sub: 'Rwanda National Police HQ' },
-  { icon: '⏰', label: 'Office Hours', value: 'Mon–Fri: 7:30am–5:00pm', sub: 'Saturday: 8:00am–12:00pm' },
+  { icon: '', label: 'Phone', value: '+250 788 311 155', sub: 'Rwanda National Police (24/7)' },
+  { icon: '', label: 'Email', value: 'support@rwandadrive.rw', sub: 'Response within 24 hours' },
+  { icon: '', label: 'Office', value: 'KN 3 Ave, Kigali', sub: 'Rwanda National Police HQ' },
+  { icon: '', label: 'Office Hours', value: 'Mon–Fri: 7:30am–5:00pm', sub: 'Saturday: 8:00am–12:00pm' },
 ];
 
 const faqs = [
@@ -67,7 +67,6 @@ export default function Contact() {
               <p>Fill in the form and we'll get back to you as soon as possible.</p>
               {sent ? (
                 <div className={styles.successBox}>
-                  <div className={styles.successIcon}>✅</div>
                   <h3>Message Sent!</h3>
                   <p>Thank you for reaching out. We'll respond within 24 hours to <strong>{form.email}</strong>.</p>
                 </div>

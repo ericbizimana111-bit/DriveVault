@@ -107,7 +107,7 @@ export default function AdminAddDocument() {
             </div>
             <input type="file" accept="image/*" ref={photoRef} onChange={handlePhoto} style={{ display: 'none' }} />
             <button type="button" className={styles.photoBtn} onClick={() => photoRef.current.click()}>
-              {photoPreview ? '📷 Change Photo' : '📷 Upload Document Photo'}
+              {photoPreview ? 'Change Photo' : 'Upload Document Photo'}
             </button>
             {photoPreview && (
               <button type="button" className={styles.removeBtn} onClick={() => { setPhoto(null); setPhotoPreview(null); }}>

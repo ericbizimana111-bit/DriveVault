@@ -15,7 +15,7 @@ export default function DriverLayout() {
       <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
         <div className={styles.sidebarTop}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>🚗</span>
+           
             {!collapsed && <span className={styles.logoText}>Rwanda DriveDoc</span>}
           </div>
           <button className={styles.toggle} onClick={() => setCollapsed(!collapsed)}>
@@ -40,22 +40,22 @@ export default function DriverLayout() {
 
         <nav className={styles.nav}>
           <NavLink to="/driver-dashboard" end className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
-           
+
             {!collapsed && <span>Dashboard</span>}
           </NavLink>
           <NavLink to="/my-documents" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
-            
+
             {!collapsed && <span>My Documents</span>}
           </NavLink>
           <NavLink to="/profile" className={({ isActive }) => `${styles.navItem} ${isActive ? styles.active : ''}`}>
-           
+
             {!collapsed && <span>My Profile</span>}
           </NavLink>
         </nav>
 
         <div className={styles.sidebarBottom}>
           <button className={styles.logoutBtn} onClick={handleLogout}>
-           
+
             {!collapsed && <span>Logout</span>}
           </button>
         </div>

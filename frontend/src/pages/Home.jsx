@@ -74,14 +74,14 @@ const docTypes = [
 ];
 
 const rules = [
-  { icon: '🚦', text: 'Speed limit: 40 km/h in towns, 60–80 km/h on highways' },
-  { icon: '🍺', text: 'Legal blood alcohol limit: 0.08%' },
-  { icon: '📱', text: 'No mobile phone use without hands-free device' },
-  { icon: '🚗', text: 'Drive on the right side of the road' },
-  { icon: '🪑', text: 'Seatbelts mandatory for all passengers' },
-  { icon: '🚷', text: 'No overtaking on the left side' },
-  { icon: '👟', text: 'Yield to pedestrians at crossings' },
-  { icon: '📋', text: 'Always carry all valid vehicle documents' },
+  { icon: '', text: 'Speed limit: 40 km/h in towns' },
+  { icon: '', text: 'Legal blood alcohol limit: 0.08%' },
+  { icon: '', text: 'No mobile phone use while driving' },
+  { icon: '', text: 'Drive on the right side of the road' },
+  { icon: '', text: 'passengers should wear seatbelts' },
+  { icon: '', text: 'No overtaking on the left side' },
+  { icon: '', text: 'Yield to pedestrians at crossings' },
+  { icon: '', text: 'Carry all valid vehicle documents' },
 ];
 
 const stats = [
