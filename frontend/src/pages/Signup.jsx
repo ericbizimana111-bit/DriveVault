@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'; //shwo success or error messages 
 import { useAuth } from '../context/AuthContext';
+import { Eye, EyeOff, Car } from 'lucide-react';
 import styles from './Signup.module.css';
 
 export default function Signup() {
@@ -66,7 +67,7 @@ export default function Signup() {
             <div className={styles.left}>
                 <div className={styles.leftContent}>
                     <div className={styles.logo}>
-                        <span></span>
+                        <Car size={28} className={styles.logoIcon} />
                         <div>
                             <div className={styles.logoMain}>Rwanda DriveDoc</div>
                             <div className={styles.logoSub}>Driver Document Portal</div>
@@ -194,7 +195,7 @@ export default function Signup() {
                                         required
                                     />
                                     <button type="button" className={styles.passToggle} onClick={() => setShowPass(!showPass)}>
-                                        {showPass ? 'Hide' : 'Show'}
+                                        {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                                     </button>
                                 </div>
                                 {form.password && (<StrengthBar password={form.password} />)}
@@ -215,7 +216,7 @@ export default function Signup() {
                                         required
                                     />
                                     <button type="button" className={styles.passToggle} onClick={() => setShowConfirm(!showConfirm)}>
-                                        {showConfirm ? 'Hide' : 'Show'}
+                                        {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                                     </button>
                                 </div>
                             </div>
