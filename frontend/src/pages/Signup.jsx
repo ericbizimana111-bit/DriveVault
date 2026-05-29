@@ -51,9 +51,9 @@ export default function Signup() {
         if (!validateStep2()) return;
         setLoading(true);
         try {
-            const u = await register(form);
-            toast.success(`Welcome, ${u.name.split(' ')[0]}! Your account is pending verification.`);
-            navigate('/driver-dashboard');
+            const result = await register(form);
+            toast.success(`Welcome, ${result.name.split(' ')[0]}! Please verify your email to complete signup.`);
+            navigate('/verify-email');
         } catch (err) {
             toast.error(err.message || 'Registration failed. Please try again.');
         } finally {
