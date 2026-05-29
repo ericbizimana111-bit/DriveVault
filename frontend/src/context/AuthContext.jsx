@@ -61,7 +61,7 @@ export function AuthProvider({ children }) {
 
   const fetchMe = useCallback(async () => {
     try {
-      const res = await fetch(`${API}/auth/me`, {
+      const res = await apiFetch('/auth/me', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
@@ -76,7 +76,7 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [API, token, logout]);
+  }, [token, logout]);
 
 
 
