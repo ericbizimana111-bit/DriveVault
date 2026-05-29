@@ -88,37 +88,68 @@ export function AuthProvider({ children }) {
 
 
   const login = useCallback(async (email, password) => {
-    const res = await fetch(`${API}/auth/login`, {
+    const res = await apiFetch('/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
-
     const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message || 'Login failed');
+    if (!res.ok) {
+      const error = new Error(data.message || 'Login failed');
+      if (data.requiresEmailVerification) {
+        error.code = 'VERIFICATION_REQUIRED';
+        error.payload = data;
+      }
+      throw error;
+    }
 
     localStorage.setItem('rwd_token', data.token);
     setToken(data.token);
     setUser(data.user);
     return data.user;
-  }, [API]);
+  }, []);
 
   const register = useCallback(async (payload) => {
-    const res = await fetch(`${API}/auth/signup`, {
+    const res = await apiFetch('/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
     const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Registration failed');
+    if (!res.ok) {
+      throw new Error(data.message || 'Registration failed');
+    }
+
+    setPendingVerification({ email: data.email, userId: data.userId });
+    return data;
+  }, []);
+
+  const verifyOtp = useCallback(async (email, otp) => {
+    const res = await apiFetch('/auth/verify-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, otp })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'OTP verification failed');
 
     localStorage.setItem('rwd_token', data.token);
     setToken(data.token);
     setUser(data.user);
+    setPendingVerification(null);
     return data.user;
-  }, [API]);
+  }, []);
+
+  const resendOtp = useCallback(async (email) => {
+    const res = await apiFetch('/auth/resend-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to resend OTP');
+    return data;
+  }, []);
 
   return (
     <AuthContext.Provider value={{
