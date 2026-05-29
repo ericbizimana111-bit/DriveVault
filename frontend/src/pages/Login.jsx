@@ -101,7 +101,7 @@ export default function Login() {
                   required
                 />
                 <button type="button" className={styles.passToggle} onClick={() => setShowPass(!showPass)}>
-                  {showPass ? 'Hide' : 'Show'}
+                  {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
