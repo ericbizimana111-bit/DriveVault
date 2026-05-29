@@ -30,7 +30,7 @@ export default function PublicLayout() {
 
             {/* LOGO */}
             <div className={styles.logo} onClick={() => navigate('/')}>
-              <div className={styles.logoIcon}>🚗</div>
+              <div className={styles.logoIcon}></div>
               <div className={styles.logoText}>
                 <span className={styles.logoMain}>Rwanda</span>
                 <span className={styles.logoSub}>DriveDoc</span>

@@ -11,6 +11,17 @@ const userSchema = new mongoose.Schema({
     dateOfBirth: { type: String, default: '' },
     address: { type: String, default: '' },
     photo: { type: String, default: null },
+    // Email verification fields
+    isEmailVerified: { type: Boolean, default: false },
+    emailVerifiedAt: { type: Date, default: null },
+    // OTP tracking (stores the hash, not the actual OTP)
+    otpHash: { type: String, default: null },
+    otpExpires: { type: Date, default: null },
+    otpAttempts: { type: Number, default: 0 },
+    // Account security
+    lastLogin: { type: Date, default: null },
+    loginAttempts: { type: Number, default: 0 },
+    lockUntil: { type: Date, default: null },
     createdAt: { type: Date, default: Date.now }
 });
 

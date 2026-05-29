@@ -68,7 +68,7 @@ export default function DriverProfile() {
       <div className={styles.header}>
         <h1>My Profile</h1>
         <p>Your personal details and license information as registered by the administrator</p>
-        
+
       </div>
 
       <div className={styles.grid}>
@@ -109,7 +109,7 @@ export default function DriverProfile() {
                 onClick={handlePhotoUpload}
                 disabled={uploading}
               >
-                {uploading ? 'Uploading...' : '✓ Upload Photo'}
+                {uploading ? 'Uploading...' : 'Upload Photo'}
               </button>
             )}
           </div>
@@ -135,7 +135,7 @@ export default function DriverProfile() {
                 <div className={styles.licLabel}>License Category</div>
                 <div className={styles.licCode} style={{ color: licenseInfo.color }}>{cat}</div>
               </div>
-              
+
             </div>
             <div className={styles.licName}>{licenseInfo.label}</div>
             <div className={styles.licVehicles}>
@@ -164,7 +164,7 @@ export default function DriverProfile() {
 
       {/* Road Rules Reminder */}
       <div className={styles.card}>
-        <h3 className={styles.cardTitle}>🇷🇼 Rwanda Road Rules Reminder</h3>
+        <h3 className={styles.cardTitle}>Rwanda Road Rules Reminder</h3>
         <div className={styles.rulesGrid}>
           <div className={styles.rule}><p>Speed: 40km/h in towns, 60–80km/h on highways</p></div>
           <div className={styles.rule}><p>Blood alcohol limit: 0.08%</p></div>

@@ -90,10 +90,7 @@
 .slideGradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-      rgba(11, 22, 35, 0.88) 0%,
-      rgba(11, 22, 35, 0.55) 55%,
-      rgba(0, 154, 68, 0.25) 100%);
+  background: rgba(11, 22, 35, 0.88);
 }
 
 /* Rwanda flag stripes at top */
@@ -138,7 +135,7 @@
   background: rgba(32, 190, 241, 0.18);
   border: 1px solid rgba(32, 190, 241, 0.45);
   color: #20BEF1;
-  font-family:'poppins';
+  font-family: 'poppins';
   font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.04em;
@@ -520,7 +517,7 @@
 .featureImgOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.55));
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .featureIconBadge {
@@ -600,7 +597,7 @@
 .codeImgGrad {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(11, 22, 35, 0.7) 0%, transparent 60%);
+  background: rgba(11, 22, 35, 0.7);
 }
 
 .codeTagWrap {
@@ -725,7 +722,7 @@
 .docCardBack2 {
   top: -20px;
   left: 20px;
-  background: linear-gradient(135deg, #1a6a3a 0%, #0d4a27 100%);
+  background: #1a6a3a;
   transform: rotate(-6deg) translateZ(-20px);
   opacity: 0.65;
   filter: blur(0.5px);
@@ -735,7 +732,7 @@
 .docCardBack1 {
   top: -10px;
   left: 10px;
-  background: linear-gradient(135deg, #1a3a6a 0%, #0d2747 100%);
+  background: #1a3a6a;
   transform: rotate(-3deg) translateZ(-10px);
   opacity: 0.8;
   z-index: 2;
@@ -744,7 +741,7 @@
 .docCardFront {
   top: 0;
   left: 0;
-  background: linear-gradient(135deg, #0B1623 0%, #162840 100%);
+  background: #0B1623;
   border: 1px solid rgba(32, 190, 241, 0.2);
   z-index: 3;
   animation: cardFloat 4s ease-in-out infinite;
@@ -990,7 +987,7 @@
   transform: translate(-50%, -50%);
   width: 600px;
   height: 600px;
-  background: radial-gradient(circle, rgba(0, 154, 68, 0.18) 0%, transparent 70%);
+  background: transparent;
   pointer-events: none;
 }
 

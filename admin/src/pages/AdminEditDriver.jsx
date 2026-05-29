@@ -63,7 +63,7 @@ export default function AdminEditDriver() {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handlePhoto = (e) => { 
+    const handlePhoto = (e) => {
         const file = e.target.files[0];
         if (!file) return;
         setPhoto(file);
@@ -106,7 +106,7 @@ export default function AdminEditDriver() {
         <div className={styles.page}>
             <div className={styles.pageHeader}>
                 <div>
-                    <button className={styles.backBtn} onClick={() => navigate('/admin/drivers')}>← Back</button>
+                    <button className={styles.backBtn} onClick={() => navigate('/admin/drivers')}>Back</button>
                     <h1>Edit Driver</h1>
                     <p>Update driver information and license details</p>
                 </div>
@@ -122,7 +122,7 @@ export default function AdminEditDriver() {
                                 ? <img src={photoPreview} alt="preview" className={styles.photoPreview} />
                                 : (
                                     <div className={styles.photoPlaceholder}>
-                                        <span>👤</span>
+                                        <span></span>
                                         <p>Click to upload photo</p>
                                         <small>Driver profile picture</small>
                                     </div>
@@ -131,7 +131,7 @@ export default function AdminEditDriver() {
                         </div>
                         <input type="file" accept="image/*" ref={photoRef} onChange={handlePhoto} style={{ display: 'none' }} />
                         <button type="button" className={styles.photoBtn} onClick={() => photoRef.current.click()}>
-                            {photoPreview ? '📷 Change Photo' : '📷 Upload Photo'}
+                            {photoPreview ? 'Change Photo' : 'Upload Photo'}
                         </button>
                     </div>
                 </div>
@@ -226,7 +226,7 @@ export default function AdminEditDriver() {
                     <div className={styles.formActions}>
                         <button type="button" className={styles.cancelBtn} onClick={() => navigate('/admin/drivers')}>Cancel</button>
                         <button type="submit" className={styles.submitBtn} disabled={submitting}>
-                            {submitting ? 'Updating...' : '✓ Update Driver'}
+                            {submitting ? 'Updating...' : 'Update Driver'}
                         </button>
                     </div>
                 </div>

@@ -55,7 +55,7 @@ export default function AdminAddDriver() {
     <div className={styles.page}>
       <div className={styles.pageHeader}>
         <div>
-          <button className={styles.backBtn} onClick={() => navigate('/admin/drivers')}>← Back</button>
+          <button className={styles.backBtn} onClick={() => navigate('/admin/drivers')}>Back</button>
           <h1>Add New Driver</h1>
           <p>Register a new driver and create their account in the system</p>
         </div>
@@ -70,7 +70,7 @@ export default function AdminAddDriver() {
                 ? <img src={photoPreview} alt="preview" className={styles.photoPreview} />
                 : (
                   <div className={styles.photoPlaceholder}>
-                    <span>📷</span>
+                    <span></span>
                     <p>Click to upload driver photo</p>
                     <small>JPG, PNG up to 5MB</small>
                   </div>
@@ -85,7 +85,7 @@ export default function AdminAddDriver() {
               style={{ display: 'none' }}
             />
             <button type="button" className={styles.photoBtn} onClick={() => photoRef.current.click()}>
-              {photoPreview ? '📷 Change Photo' : '📷 Upload Photo'}
+              {photoPreview ? 'Change Photo' : 'Upload Photo'}
             </button>
             {photoPreview && (
               <button type="button" className={styles.removePhotoBtn} onClick={() => { setPhoto(null); setPhotoPreview(null); }}>
@@ -95,7 +95,7 @@ export default function AdminAddDriver() {
           </div>
 
           <div className={styles.infoBox}>
-            <h4>👤 Account Note</h4>
+            <h4>Account Note</h4>
             <p>Once added, the driver will use their email and password to log in. Only admins can create or delete accounts.</p>
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function AdminAddDriver() {
           <div className={styles.formActions}>
             <button type="button" className={styles.cancelBtn} onClick={() => navigate('/admin/drivers')}>Cancel</button>
             <button type="submit" className={styles.submitBtn} disabled={loading}>
-              {loading ? 'Adding Driver...' : '✓ Add Driver'}
+              {loading ? 'Adding Driver...' : 'Add Driver'}
             </button>
           </div>
         </div>

@@ -67,13 +67,13 @@ export default function AdminDocuments() {
       {/* Filters */}
       <div className={styles.toolbar}>
         <div className={styles.searchBar}>
-          <span>🔍</span>
+          <span></span>
           <input
             placeholder="Search by document, driver, or number..."
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
-          {search && <button onClick={() => setSearch('')}>✕</button>}
+          {search && <button onClick={() => setSearch('')}></button>}
         </div>
         <div className={styles.statusFilters}>
           {['all', 'valid', 'expiring', 'expired'].map(f => (
@@ -82,7 +82,7 @@ export default function AdminDocuments() {
               className={`${styles.filterBtn} ${filterStatus === f ? styles.active : ''}`}
               onClick={() => setFilterStatus(f)}
             >
-              {f === 'all' ? 'All' : f === 'valid' ? '✅ Valid' : f === 'expiring' ? '⚠️ Expiring' : '🚫 Expired'}
+              {f === 'all' ? 'All' : f === 'valid' ? 'Valid' : f === 'expiring' ? 'Expiring' : 'Expired'}
             </button>
           ))}
         </div>
@@ -92,7 +92,7 @@ export default function AdminDocuments() {
         <div className={styles.loading}>Loading documents...</div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <div>📄</div>
+          <div></div>
           <p>{documents.length === 0 ? 'No documents yet.' : 'No documents match your filters.'}</p>
           {documents.length === 0 && (
             <button onClick={() => navigate('/admin/documents/add')}>Add First Document →</button>
@@ -137,7 +137,7 @@ export default function AdminDocuments() {
                   <td>{doc.expiryDate ? format(parseISO(doc.expiryDate), 'dd MMM yyyy') : '—'}</td>
                   <td><code className={styles.payCode}>{doc.paymentCode}</code></td>
                   <td>
-                    <button className={styles.deleteBtn} onClick={() => setConfirmId(doc.id)} title="Delete">🗑️</button>
+                    <button className={styles.deleteBtn} onClick={() => setConfirmId(doc.id)} title="Delete">Delete</button>
                   </td>
                 </tr>
               ))}
@@ -150,7 +150,7 @@ export default function AdminDocuments() {
       {selectedPhoto && (
         <div className={styles.photoOverlay} onClick={() => setSelectedPhoto(null)}>
           <div className={styles.photoModal}>
-            <button className={styles.closeBtn} onClick={() => setSelectedPhoto(null)}>✕</button>
+            <button className={styles.closeBtn} onClick={() => setSelectedPhoto(null)}></button>
             <img src={selectedPhoto} alt="document" />
           </div>
         </div>
@@ -160,7 +160,7 @@ export default function AdminDocuments() {
       {confirmId && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
-            <div>⚠️</div>
+            <div></div>
             <h3>Delete Document?</h3>
             <p>This will permanently remove the document from the system.</p>
             <div className={styles.modalActions}>

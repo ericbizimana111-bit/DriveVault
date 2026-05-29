@@ -6,7 +6,7 @@ A full-stack driving management system with three main applications:
 - **Frontend**: Driver portal (React + Vite)
 - **Admin**: Admin dashboard (React + Vite)
 
----
+--- 
 
 ## 📁 Complete Folder Structure
 

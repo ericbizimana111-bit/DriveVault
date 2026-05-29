@@ -45,21 +45,21 @@ export default function AdminDrivers() {
 
       {/* Search */}
       <div className={styles.searchBar}>
-        <span className={styles.searchIcon}>🔍</span>
+        <span className={styles.searchIcon}></span>
         <input
           type="text"
           placeholder="Search by name, email or National ID..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        {search && <button className={styles.clearBtn} onClick={() => setSearch('')}>✕</button>}
+        {search && <button className={styles.clearBtn} onClick={() => setSearch('')}></button>}
       </div>
 
       {loading ? (
         <div className={styles.loading}>Loading drivers...</div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <div>👥</div>
+          <div></div>
           <p>{search ? 'No drivers match your search.' : 'No drivers registered yet.'}</p>
           {!search && <button onClick={() => navigate('/admin/drivers/add')}>Add First Driver →</button>}
         </div>
@@ -106,7 +106,7 @@ export default function AdminDrivers() {
                         onClick={() => navigate(`/admin/drivers/${getId(driver)}/edit`)}
                         title="Edit Driver"
                       >
-                        ✏️
+                        Edit
                       </button>
                       <button
                         className={styles.docBtn}
@@ -120,7 +120,7 @@ export default function AdminDrivers() {
                         onClick={() => setConfirmId(getId(driver))}
                         title="Delete Driver"
                       >
-                        🗑️
+                        Delete
                       </button>
                     </div>
                   </td>
@@ -135,7 +135,7 @@ export default function AdminDrivers() {
       {confirmId && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
-            <div className={styles.modalIcon}>⚠️</div>
+            <div className={styles.modalIcon}></div>
             <h3>Delete Driver?</h3>
             <p>This will permanently delete the driver and all their documents. This action cannot be undone.</p>
             <div className={styles.modalActions}>

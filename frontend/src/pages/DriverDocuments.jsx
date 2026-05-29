@@ -77,7 +77,7 @@ export default function DriverDocuments() {
         <div className={styles.loading}>Loading your documents...</div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <div>📭</div>
+          <div></div>
           <p>{docs.length === 0 ? 'No documents yet. Contact your administrator.' : 'No documents match this filter.'}</p>
         </div>
       ) : (
@@ -117,7 +117,7 @@ export default function DriverDocuments() {
       {selected && (
         <div className={styles.modalOverlay} onClick={() => setSelected(null)}>
           <div className={styles.modal} onClick={e => e.stopPropagation()}>
-            <button className={styles.modalClose} onClick={() => setSelected(null)}>✕</button>
+            <button className={styles.modalClose} onClick={() => setSelected(null)}>×</button>
             <h2>{selected.documentType}</h2>
             {selected.documentPhoto && (
               <img src={`${API_BASE}${selected.documentPhoto}`} alt="document" className={styles.modalPhoto} />

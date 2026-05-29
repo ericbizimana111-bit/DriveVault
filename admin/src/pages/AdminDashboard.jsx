@@ -19,10 +19,10 @@ export default function AdminDashboard() {
   const expiringSoon = documents.filter(d => d.expiryDate && differenceInDays(parseISO(d.expiryDate), new Date()) >= 0 && differenceInDays(parseISO(d.expiryDate), new Date()) <= 30);
 
   const stats = [
-    { label: 'Total Drivers', value: drivers.length, icon: '👥', color: 'var(--primary)', action: () => navigate('/admin/drivers') },
-    { label: 'Total Documents', value: documents.length, icon: '📄', color: '#2980b9', action: () => navigate('/admin/documents') },
-    { label: 'Expiring Soon', value: expiringSoon.length, icon: '⚠️', color: 'var(--warning)', action: () => navigate('/admin/documents') },
-    { label: 'Expired', value: expired.length, icon: '🚫', color: 'var(--danger)', action: () => navigate('/admin/documents') },
+    { label: 'Total Drivers', value: drivers.length, icon: '', color: 'var(--primary)', action: () => navigate('/admin/drivers') },
+    { label: 'Total Documents', value: documents.length, icon: '', color: '#2980b9', action: () => navigate('/admin/documents') },
+    { label: 'Expiring Soon', value: expiringSoon.length, icon: '', color: 'var(--warning)', action: () => navigate('/admin/documents') },
+    { label: 'Expired', value: expired.length, icon: '', color: 'var(--danger)', action: () => navigate('/admin/documents') },
   ];
 
   return (
@@ -54,13 +54,13 @@ export default function AdminDashboard() {
       {/* Alerts */}
       {expired.length > 0 && (
         <div className={styles.alertDanger}>
-          🚫 <strong>{expired.length} expired document(s)</strong> require immediate attention.
+          <strong>{expired.length} expired document(s)</strong> require immediate attention.
           <button onClick={() => navigate('/admin/documents')}>View →</button>
         </div>
       )}
       {expiringSoon.length > 0 && (
         <div className={styles.alertWarning}>
-          ⚠️ <strong>{expiringSoon.length} document(s)</strong> expire within 30 days.
+          <strong>{expiringSoon.length} document(s)</strong> expire within 30 days.
           <button onClick={() => navigate('/admin/documents')}>View →</button>
         </div>
       )}

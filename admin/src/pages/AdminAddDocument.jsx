@@ -82,7 +82,7 @@ export default function AdminAddDocument() {
     <div className={styles.page}>
       <div className={styles.pageHeader}>
         <div>
-          <button className={styles.backBtn} onClick={() => navigate('/admin/documents')}>← Back</button>
+          <button className={styles.backBtn} onClick={() => navigate('/admin/documents')}>Back</button>
           <h1>Add Document</h1>
           <p>Attach a document to a registered driver's profile</p>
         </div>
@@ -98,7 +98,7 @@ export default function AdminAddDocument() {
                 ? <img src={photoPreview} alt="preview" className={styles.photoPreview} />
                 : (
                   <div className={styles.photoPlaceholder}>
-                    <span>🪪</span>
+                    <span></span>
                     <p>Click to upload document image</p>
                     <small>Photo of the physical document</small>
                   </div>
@@ -218,7 +218,7 @@ export default function AdminAddDocument() {
                   className={styles.codeInput}
                   placeholder="RWD-XXXXXX"
                 />
-                <button type="button" className={styles.regenBtn} onClick={regenerateCode}>🔄 Generate</button>
+                <button type="button" className={styles.regenBtn} onClick={regenerateCode}>Generate</button>
               </div>
               <small className={styles.hint}>This code is used by the driver to pay for document renewal at authorized payment points.</small>
             </div>
@@ -227,7 +227,7 @@ export default function AdminAddDocument() {
           <div className={styles.formActions}>
             <button type="button" className={styles.cancelBtn} onClick={() => navigate('/admin/documents')}>Cancel</button>
             <button type="submit" className={styles.submitBtn} disabled={loading}>
-              {loading ? 'Adding Document...' : '✓ Add Document'}
+              {loading ? 'Adding Document...' : 'Add Document'}
             </button>
           </div>
         </div>

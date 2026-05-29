@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 :root {
     --primary: #1a3a2a;
@@ -23,7 +24,7 @@
 }
 
 body {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
@@ -67,6 +68,6 @@ textarea {
 
 /* Toastify override */
 .Toastify__toast {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Poppins', sans-serif;
     border-radius: 8px;
 }

@@ -7,7 +7,7 @@ const navItems = [
   { to: '/admin', icon: '', label: 'Dashboard', end: true },
   { to: '/admin/drivers', icon: '', label: 'Drivers' },
   { to: '/admin/documents', icon: '', label: 'Documents' },
-];
+];]
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
@@ -24,7 +24,7 @@ export default function AdminLayout() {
       <aside className={`${styles.sidebar} ${collapsed ? styles.collapsed : ''}`}>
         <div className={styles.sidebarTop}>
           <div className={styles.logo}>
-            <span className={styles.logoIcon}>🚗</span>
+            <span className={styles.logoIcon}></span>
             {!collapsed && (
               <div>
                 <div className={styles.logoMain}>Rwanda DriveDoc</div>
@@ -33,7 +33,7 @@ export default function AdminLayout() {
             )}
           </div>
           <button className={styles.toggle} onClick={() => setCollapsed(!collapsed)}>
-            {collapsed ? '→' : '←'}
+            {collapsed ? '>' : '<'}
           </button>
         </div>
 
@@ -87,7 +87,7 @@ export default function AdminLayout() {
             <span className={styles.topbarTitle}>Rwanda DriveDoc Management System</span>
           </div>
           <div className={styles.topbarRight}>
-            <span className={styles.topbarUser}>👤 {user?.name}</span>
+            <span className={styles.topbarUser}>User {user?.name}</span>
           </div>
         </header>
         <main className={styles.main}>

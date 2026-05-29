@@ -50,7 +50,7 @@ export default function Login() {
       <div className={styles.left}>
         <div className={styles.leftContent}>
           <div className={styles.logo} onClick={() => navigate('/')}>
-            <span>🚗</span>
+            <span></span>
             <div>
               <div className={styles.logoMain}>Rwanda DriveDoc</div>
               <div className={styles.logoSub}>Driver Document Portal</div>
@@ -100,7 +100,7 @@ export default function Login() {
                   required
                 />
                 <button type="button" className={styles.passToggle} onClick={() => setShowPass(!showPass)}>
-                  {showPass ? '🙈' : '👁️'}
+                  {showPass ? 'Hide' : 'Show'}
                 </button>
               </div>
             </div>
@@ -111,7 +111,7 @@ export default function Login() {
           </form>
 
           <div className={styles.note}>
-            <p>🔒 Accounts are created by Rwanda National Police administrators only. If you don't have an account, contact your nearest RNP office.</p>
+            <p>Accounts are created by Rwanda National Police administrators only. If you don't have an account, contact your nearest RNP office.</p>
           </div>
           <p className={styles.signup}>Dont have an account? <span onClick={() => navigate('/signup')}>Sign Up </span></p>
 

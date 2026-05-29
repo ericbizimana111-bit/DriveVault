@@ -38,7 +38,7 @@ export default function AdminLogin() {
             <div className={styles.left}>
                 <div className={styles.leftContent}>
                     <div className={styles.logo}>
-                        <span>🚗</span>
+                        <span></span>
                         <div>
                             <div className={styles.logoMain}>Rwanda DriveDoc</div>
                             <div className={styles.logoSub}>Admin Panel</div>
@@ -92,7 +92,7 @@ export default function AdminLogin() {
                                     className={styles.passToggle}
                                     onClick={() => setShowPass(!showPass)}
                                 >
-                                    {showPass ? '🙈' : '👁️'}
+                                    {showPass ? 'Hide' : 'Show'}
                                 </button>
                             </div>
                         </div>

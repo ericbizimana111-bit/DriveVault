@@ -66,7 +66,7 @@ export default function Signup() {
             <div className={styles.left}>
                 <div className={styles.leftContent}>
                     <div className={styles.logo}>
-                        <span>🚗</span>
+                        <span></span>
                         <div>
                             <div className={styles.logoMain}>Rwanda DriveDoc</div>
                             <div className={styles.logoSub}>Driver Document Portal</div>
@@ -194,7 +194,7 @@ export default function Signup() {
                                         required
                                     />
                                     <button type="button" className={styles.passToggle} onClick={() => setShowPass(!showPass)}>
-                                        {showPass ? '🙈' : '👁️'}
+                                        {showPass ? 'Hide' : 'Show'}
                                     </button>
                                 </div>
                                 {form.password && (<StrengthBar password={form.password} />)}
@@ -215,24 +215,24 @@ export default function Signup() {
                                         required
                                     />
                                     <button type="button" className={styles.passToggle} onClick={() => setShowConfirm(!showConfirm)}>
-                                        {showConfirm ? '🙈' : '👁️'}
+                                        {showConfirm ? 'Hide' : 'Show'}
                                     </button>
                                 </div>
                             </div>
 
                             <div className={styles.btnRow}>
                                 <button type="button" className={styles.backBtn} onClick={() => setStep(1)}>
-                                    ← Back
+                                    Back
                                 </button>
                                 <button type="submit" className={styles.submitBtn} disabled={loading}>
-                                    {loading ? 'Creating...' : 'Create Account ✓'}
+                                    {loading ? 'Creating...' : 'Create Account'}
                                 </button>
                             </div>
                         </form>
                     )}
 
                     <div className={styles.note}>
-                        <p>🔒 Your account will be reviewed and activated by an RNP administrator before you can access your documents.</p>
+                        <p>Your account will be reviewed and activated by an RNP administrator before you can access your documents.</p>
                     </div>
 
                     <div className={styles.loginLink}>

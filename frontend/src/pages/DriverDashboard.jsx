@@ -37,7 +37,7 @@ export default function DriverDashboard() {
       {/* Welcome */}
       <div className={styles.welcome}>
         <div className={styles.welcomeText}>
-          <h1>Good {getGreeting()}, {user?.name?.split(' ')[0]} 👋</h1>
+          <h1>Good {getGreeting()}, {user?.name?.split(' ')[0]}</h1>
           <p>Here's your driving document overview. Keep all documents valid to stay road-legal in Rwanda.</p>
         </div>
         <button className={styles.docsBtn} onClick={() => navigate('/my-documents')}>View All Documents →</button>
@@ -86,7 +86,7 @@ export default function DriverDashboard() {
           <div className={styles.loading}>Loading documents...</div>
         ) : docs.length === 0 ? (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>📭</div>
+            <div className={styles.emptyIcon}></div>
             <p>No documents yet. Your administrator will add your documents after your license is issued.</p>
           </div>
         ) : (

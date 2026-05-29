@@ -174,7 +174,7 @@ export default function Home() {
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>
             <span className={styles.badgeDot} />
-            🇷🇼 Official Rwanda Transport Portal
+            Official Rwanda Transport Portal
           </div>
           <h1 className={styles.heroTitle}>
             {heroSlides[slideIndex].title}
@@ -312,19 +312,19 @@ export default function Home() {
               <div className={styles.cardStack}>
                 <div className={`${styles.docCard} ${styles.docCardBack2}`}>
                   <div className={styles.docCardInner}>
-                    <span className={styles.docIcon}>🚗</span>
+                    <span className={styles.docIcon}></span>
                     <span>Insurance Certificate</span>
                   </div>
                 </div>
                 <div className={`${styles.docCard} ${styles.docCardBack1}`}>
                   <div className={styles.docCardInner}>
-                    <span className={styles.docIcon}>📋</span>
+                    <span className={styles.docIcon}></span>
                     <span>Vehicle Registration</span>
                   </div>
                 </div>
                 <div className={`${styles.docCard} ${styles.docCardFront}`}>
                   <div className={styles.docCardHeader}>
-                    <span className={styles.docCardFlag}>🇷🇼</span>
+                    <span className={styles.docCardFlag}></span>
                     <div>
                       <p className={styles.docCardIssuer}>Rwanda National Police</p>
                       <p className={styles.docCardType}>Official Driving License</p>
@@ -436,7 +436,7 @@ export default function Home() {
 
       {/* ═══ FOOTER BAR ═══ */}
       <div className={styles.footerBar}>
-        <span>🇷🇼 Rwanda DriveDoc</span>
+        <span>Rwanda DriveDoc</span>
         <span>Powered by Rwanda National Police</span>
         <span>© {new Date().getFullYear()}</span>
       </div>
