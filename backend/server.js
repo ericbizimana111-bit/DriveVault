@@ -4,8 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
-const mongoSanitize = require('express-mongo-sanitize');
 const csurf = require('csurf');
+const { mongoSanitizeMiddleware } = require('./middleware/validation');
 require('dotenv').config();
 const mongoose = require('mongoose');
 
@@ -39,7 +39,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(cookieParser());
-app.use(mongoSanitize());
+app.use(mongoSanitizeMiddleware);
 
 const csrfProtection = csurf({
   cookie: {

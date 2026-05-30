@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const otpSchema = new mongoose.Schema({
     email: { type: String, required: true, lowercase: true, trim: true },
     otpHash: { type: String, required: true }, // bcrypt hashed OTP
-    expiresAt: { type: Date, required: true, index: { expireAfterSeconds: 0 } }, // TTL index for auto-deletion
+    expiresAt: { type: Date, required: true }, // TTL index for auto-deletion
     attempts: { type: Number, default: 0 },
     maxAttempts: { type: Number, default: 5 },
     used: { type: Boolean, default: false },

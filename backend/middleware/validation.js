@@ -1,5 +1,24 @@
 const xss = require('xss');
-const mongoSanitize = require('mongoose-sanitize');
+const mongoSanitize = require('express-mongo-sanitize');
+const { sanitize } = mongoSanitize;
+
+const sanitizeQueryObject = (queryObj, replaceWith = '_') => {
+    if (!queryObj || typeof queryObj !== 'object') return queryObj;
+
+    Object.keys(queryObj).forEach((key) => {
+        const safeKey = key.replace(/^\$|\./g, replaceWith);
+        const value = queryObj[key];
+
+        if (safeKey !== key) {
+            queryObj[safeKey] = value;
+            delete queryObj[key];
+        }
+
+        if (typeof value === 'object' && value !== null) {
+            sanitizeQueryObject(queryObj[safeKey], replaceWith);
+        }
+    });
+};
 
 /**
  * Validate National ID format (exactly 16 digits for Rwanda)
@@ -37,7 +56,7 @@ const getPasswordStrength = (password) => {
     if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
     if (/\d/.test(password)) strength++;
     if (/[@$!%*?&]/.test(password)) strength++;
-    
+
     return {
         score: strength,
         level: strength <= 2 ? 'weak' : strength === 3 ? 'fair' : strength === 4 ? 'good' : 'strong'
@@ -64,7 +83,7 @@ const sanitizeRequestData = (req, res, next) => {
             }
         });
     }
-    
+
     // Sanitize query parameters
     if (req.query && typeof req.query === 'object') {
         Object.keys(req.query).forEach(key => {
@@ -73,19 +92,28 @@ const sanitizeRequestData = (req, res, next) => {
             }
         });
     }
-    
+
     next();
 };
 
 /**
  * Middleware to prevent NoSQL injection via MongoDB sanitization
  */
-const mongoSanitizeMiddleware = mongoSanitize({
-    replaceWith: '_',
-    onSanitize: ({ req, key }) => {
-        console.warn(`Potential NoSQL injection detected in ${key}`);
+const mongoSanitizeMiddleware = (req, res, next) => {
+    if (req.body && typeof req.body === 'object') {
+        req.body = sanitize(req.body, { replaceWith: '_' });
     }
-});
+
+    if (req.params && typeof req.params === 'object') {
+        req.params = sanitize(req.params, { replaceWith: '_' });
+    }
+
+    if (req.query && typeof req.query === 'object') {
+        sanitizeQueryObject(req.query, '_');
+    }
+
+    next();
+};
 
 module.exports = {
     validateNationalId,
@@ -96,3 +124,5 @@ module.exports = {
     sanitizeRequestData,
     mongoSanitizeMiddleware
 };
+
+

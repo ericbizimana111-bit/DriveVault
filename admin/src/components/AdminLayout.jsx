@@ -7,7 +7,7 @@ const navItems = [
   { to: '/admin', icon: '', label: 'Dashboard', end: true },
   { to: '/admin/drivers', icon: '', label: 'Drivers' },
   { to: '/admin/documents', icon: '', label: 'Documents' },
-];]
+];
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
