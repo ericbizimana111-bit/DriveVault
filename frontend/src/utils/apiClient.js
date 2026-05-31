@@ -4,7 +4,6 @@ let csrfToken = null;
 export const getApiUrl = () => API;
 
 export async function getCsrfToken() {
-    if (csrfToken) return csrfToken;
     const res = await fetch(`${API}/csrf-token`, {
         method: 'GET',
         credentials: 'include'
@@ -20,9 +19,14 @@ export async function getCsrfToken() {
 export async function apiFetch(path, options = {}) {
     const url = path.startsWith('http') ? path : `${API}${path}`;
     const method = (options.method || 'GET').toUpperCase();
-    const headers = { ...options.headers };
+    const headers = {
+        'Content-Type': 'application/json',
+        ...options.headers
+    };
 
     if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+        // Always fetch a fresh CSRF token for mutating requests
+        csrfToken = null;
         headers['X-CSRF-Token'] = await getCsrfToken();
     }
 
@@ -31,6 +35,17 @@ export async function apiFetch(path, options = {}) {
         ...options,
         headers
     });
+
+    // If 403, token may be stale — refresh once and retry
+    if (response.status === 403) {
+        csrfToken = null;
+        headers['X-CSRF-Token'] = await getCsrfToken();
+        return fetch(url, {
+            credentials: 'include',
+            ...options,
+            headers
+        });
+    }
 
     return response;
 }
