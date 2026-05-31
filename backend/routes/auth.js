@@ -21,7 +21,7 @@ const {
   otpLimiter
 } = require('../middleware/rateLimiter');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'rwanda_drive_secret_2024';
 
 const router = express.Router();
 

@@ -1,4 +1,6 @@
-import  { useState } from 'react';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { apiFetch } from '../utils/apiClient';
 import styles from './Contact.module.css';
 
 const contacts = [
@@ -23,11 +25,24 @@ export default function Contact() {
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.message) return;
-    // Simulate submission
-    setSent(true);
+    if (!form.name || !form.email || !form.message) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      await apiFetch('/messages', {
+        method: 'POST',
+        body: JSON.stringify(form)
+      });
+      toast.success('Message sent! We\'ll respond within 24 hours.');
+      setSent(true);
+    } catch (error) {
+      toast.error('Failed to send message. Please try again.');
+      console.error('Contact form error:', error);
+    }
   };
 
   return (

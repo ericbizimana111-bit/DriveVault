@@ -20,7 +20,12 @@ if (!MONGO_URI) {
   process.exit(1);
 }
 
-const allowedOrigins = [FRONTEND_URL, ADMIN_URL].filter(Boolean);
+const allowedOrigins = [
+  FRONTEND_URL,
+  ADMIN_URL,
+  'http://localhost:5174',
+  'http://localhost:5175'
+].filter(Boolean);
 
 mongoose.connect(MONGO_URI)
   .then(async () => {

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; //shwo success or error messages 
+import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
+import { Eye, EyeOff, Car } from 'lucide-react';
 
 import styles from './Signup.module.css';
 
