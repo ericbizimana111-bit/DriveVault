@@ -371,23 +371,25 @@ router.post('/login', loginLimiter, async (req, res) => {
       });
     }
 
-    // Check if account is locked (brute force protection)
-    if (user.lockUntil && new Date() < user.lockUntil) {
-      logAuthFailure('account_locked', req, {
-        email: user.email,
-        role: user.role,
-        isEmailVerified: user.isEmailVerified,
-        loginAttempts: user.loginAttempts,
-        status: 401
-      });
-      return res.status(401).json({
-        message: 'Account temporarily locked. Please try again later.'
-      });
-    }
-
     // Verify password
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
+      const isLocked = user.lockUntil && new Date() < user.lockUntil;
+
+      if (isLocked) {
+        logAuthFailure('account_locked', req, {
+          email: user.email,
+          role: user.role,
+          isEmailVerified: user.isEmailVerified,
+          loginAttempts: user.loginAttempts,
+          status: 401
+        });
+
+        return res.status(401).json({
+          message: 'Account temporarily locked. Please try again later.'
+        });
+      }
+
       // Increment login attempts
       user.loginAttempts = (user.loginAttempts || 0) + 1;
 
