@@ -52,7 +52,7 @@ const connectWithRetry = async (attempt = 1) => {
 };
 
 
-const normalizeAdminAccounts = async () => {
+const normalizeExistingAdminAccounts = async () => {
   const User = require('./models/User');
   const result = await User.updateMany(
     { role: 'admin', isEmailVerified: { $ne: true } },
@@ -64,62 +64,10 @@ const normalizeAdminAccounts = async () => {
   }
 };
 
-const bootstrapAdmin = async () => {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (!adminEmail || !adminPassword) return;
-
-  const bcrypt = require('bcryptjs');
-  const User = require('./models/User');
-  const normalizedEmail = adminEmail.toLowerCase().trim();
-  const existingAdmin = await User.findOne({ email: normalizedEmail });
-
-  if (existingAdmin) {
-    let changed = false;
-
-    if (existingAdmin.role !== 'admin') {
-      existingAdmin.role = 'admin';
-      changed = true;
-    }
-
-    if (existingAdmin.isEmailVerified !== true) {
-      existingAdmin.isEmailVerified = true;
-      existingAdmin.emailVerifiedAt = existingAdmin.emailVerifiedAt || new Date();
-      changed = true;
-    }
-
-    if (process.env.ADMIN_RESET_PASSWORD_ON_START === 'true') {
-      existingAdmin.password = await bcrypt.hash(adminPassword, 10);
-      existingAdmin.loginAttempts = 0;
-      existingAdmin.lockUntil = null;
-      changed = true;
-    }
-
-    if (changed) {
-      await existingAdmin.save();
-      console.log(`Ensured admin account ${normalizedEmail}`);
-    }
-    return;
-  }
-
-  const hashedPassword = await bcrypt.hash(adminPassword, 10);
-  await User.create({
-    name: process.env.ADMIN_NAME || 'System Administrator',
-    email: normalizedEmail,
-    password: hashedPassword,
-    role: 'admin',
-    isEmailVerified: true,
-    emailVerifiedAt: new Date()
-  });
-  console.log(`Created admin account ${normalizedEmail}`);
-};
-
 connectWithRetry()
   .then(async () => {
     console.log('MongoDB Connected');
-    await normalizeAdminAccounts();
-    await bootstrapAdmin();
+    await normalizeExistingAdminAccounts();
     app.listen(PORT, () => console.log(`Rwanda Drive Backend running on port ${PORT}`));
   })
   .catch(err => { console.error('DB Error:', err); process.exit(1); });
