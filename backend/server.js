@@ -37,6 +37,18 @@ const allowedOrigins = [
 ].filter(Boolean);
 
 
+const normalizeAdminAccounts = async () => {
+  const User = require('./models/User');
+  const result = await User.updateMany(
+    { role: 'admin', isEmailVerified: { $ne: true } },
+    { $set: { isEmailVerified: true, emailVerifiedAt: new Date() } }
+  );
+
+  if (result.modifiedCount > 0) {
+    console.log(`Verified ${result.modifiedCount} existing admin account(s)`);
+  }
+};
+
 const bootstrapAdmin = async () => {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
@@ -49,12 +61,29 @@ const bootstrapAdmin = async () => {
   const existingAdmin = await User.findOne({ email: normalizedEmail });
 
   if (existingAdmin) {
+    let changed = false;
+
     if (existingAdmin.role !== 'admin') {
       existingAdmin.role = 'admin';
+      changed = true;
+    }
+
+    if (existingAdmin.isEmailVerified !== true) {
       existingAdmin.isEmailVerified = true;
       existingAdmin.emailVerifiedAt = existingAdmin.emailVerifiedAt || new Date();
+      changed = true;
+    }
+
+    if (process.env.ADMIN_RESET_PASSWORD_ON_START === 'true') {
+      existingAdmin.password = await bcrypt.hash(adminPassword, 10);
+      existingAdmin.loginAttempts = 0;
+      existingAdmin.lockUntil = null;
+      changed = true;
+    }
+
+    if (changed) {
       await existingAdmin.save();
-      console.log(`Promoted ${normalizedEmail} to admin`);
+      console.log(`Ensured admin account ${normalizedEmail}`);
     }
     return;
   }
@@ -74,6 +103,7 @@ const bootstrapAdmin = async () => {
 mongoose.connect(MONGO_URI)
   .then(async () => {
     console.log('MongoDB Connected');
+    await normalizeAdminAccounts();
     await bootstrapAdmin();
     app.listen(PORT, () => console.log(`Rwanda Drive Backend running on port ${PORT}`));
   })

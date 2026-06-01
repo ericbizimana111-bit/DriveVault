@@ -25,6 +25,25 @@ const JWT_SECRET = process.env.JWT_SECRET || 'rwanda_drive_secret_2024';
 
 const router = express.Router();
 
+const maskEmail = (email = '') => {
+  const [name, domain] = email.split('@');
+  if (!name || !domain) return 'unknown';
+  return `${name.slice(0, 2)}***@${domain}`;
+};
+
+const logAuthFailure = (reason, req, details = {}) => {
+  console.warn('[auth:login:failed]', {
+    reason,
+    email: maskEmail(details.email),
+    ip: req.ip,
+    userAgent: req.headers['user-agent'] || null,
+    role: details.role,
+    isEmailVerified: details.isEmailVerified,
+    loginAttempts: details.loginAttempts,
+    status: details.status
+  });
+};
+
 /**
  * Generate a random 6-digit OTP
  */
@@ -333,17 +352,20 @@ router.post('/resend-otp', otpLimiter, async (req, res) => {
 router.post('/login', loginLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
+    const normalizedEmail = email?.toLowerCase().trim();
 
     if (!email || !password) {
+      logAuthFailure('missing_credentials', req, { email, status: 400 });
       return res.status(400).json({
         message: 'Email and password are required'
       });
     }
 
     // Find user
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: normalizedEmail });
 
     if (!user) {
+      logAuthFailure('user_not_found', req, { email: normalizedEmail, status: 401 });
       return res.status(401).json({
         message: 'Invalid email or password'
       });
@@ -351,18 +373,15 @@ router.post('/login', loginLimiter, async (req, res) => {
 
     // Check if account is locked (brute force protection)
     if (user.lockUntil && new Date() < user.lockUntil) {
+      logAuthFailure('account_locked', req, {
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        loginAttempts: user.loginAttempts,
+        status: 401
+      });
       return res.status(401).json({
         message: 'Account temporarily locked. Please try again later.'
-      });
-    }
-
-    // Check if email is verified
-    if (!user.isEmailVerified) {
-      return res.status(403).json({
-        message: 'Please verify your email first. Check your inbox for the OTP.',
-        requiresEmailVerification: true,
-        userId: user.id,
-        email: user.email
       });
     }
 
@@ -379,9 +398,35 @@ router.post('/login', loginLimiter, async (req, res) => {
 
       await user.save();
 
+      logAuthFailure('invalid_password', req, {
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        loginAttempts: user.loginAttempts,
+        status: 401
+      });
+
       return res.status(401).json({
         message: 'Invalid email or password',
         attemptsRemaining: 5 - user.loginAttempts
+      });
+    }
+
+    // Check if email is verified after password validation to avoid leaking account state.
+    if (!user.isEmailVerified) {
+      logAuthFailure('email_not_verified', req, {
+        email: user.email,
+        role: user.role,
+        isEmailVerified: user.isEmailVerified,
+        loginAttempts: user.loginAttempts,
+        status: 403
+      });
+
+      return res.status(403).json({
+        message: 'Please verify your email first. Check your inbox for the OTP.',
+        requiresEmailVerification: true,
+        userId: user.id,
+        email: user.email
       });
     }
 
