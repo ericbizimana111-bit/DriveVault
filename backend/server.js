@@ -36,6 +36,21 @@ const allowedOrigins = [
     : [])
 ].filter(Boolean);
 
+const connectWithRetry = async (attempt = 1) => {
+  const maxAttempts = Number(process.env.MONGO_CONNECT_RETRIES || 5);
+
+  try {
+    await mongoose.connect(MONGO_URI, { serverSelectionTimeoutMS: 15000 });
+    return;
+  } catch (err) {
+    if (attempt >= maxAttempts) throw err;
+
+    console.warn(`MongoDB connection attempt ${attempt} failed: ${err.message}`);
+    await new Promise(resolve => setTimeout(resolve, 2000 * attempt));
+    return connectWithRetry(attempt + 1);
+  }
+};
+
 
 const normalizeAdminAccounts = async () => {
   const User = require('./models/User');
@@ -100,7 +115,7 @@ const bootstrapAdmin = async () => {
   console.log(`Created admin account ${normalizedEmail}`);
 };
 
-mongoose.connect(MONGO_URI)
+connectWithRetry()
   .then(async () => {
     console.log('MongoDB Connected');
     await normalizeAdminAccounts();
@@ -174,6 +189,13 @@ app.get(/.*/, (req, res) =>
 
 app.use((err, req, res, next) => {
   if (err.code === 'EBADCSRFTOKEN') {
+    console.warn('[auth:csrf:failed]', {
+      method: req.method,
+      path: req.originalUrl,
+      origin: req.headers.origin || null,
+      ip: req.ip,
+      userAgent: req.headers['user-agent'] || null
+    });
     return res.status(403).json({ message: 'Invalid or expired CSRF token.' });
   }
   next(err);
