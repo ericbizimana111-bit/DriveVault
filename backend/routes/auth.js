@@ -377,7 +377,7 @@ router.post('/login', loginLimiter, async (req, res) => {
       const isLocked = user.lockUntil && new Date() < user.lockUntil;
 
       if (isLocked) {
-        logAuthFailure('account_locked', req, {
+        logAuthFailure('invalid_password_while_locked', req, {
           email: user.email,
           role: user.role,
           isEmailVerified: user.isEmailVerified,
@@ -386,7 +386,7 @@ router.post('/login', loginLimiter, async (req, res) => {
         });
 
         return res.status(401).json({
-          message: 'Account temporarily locked. Please try again later.'
+          message: 'Invalid password. This account is temporarily locked because of too many failed attempts.'
         });
       }
 

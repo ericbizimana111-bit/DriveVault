@@ -46,7 +46,7 @@ export default function AdminDrivers() {
       </div>
 
       <div className={styles.searchBar}>
-        <span className={styles.searchIcon}>🔍</span>
+      
         <input
           type="text"
           placeholder="Search by name, email or National ID..."

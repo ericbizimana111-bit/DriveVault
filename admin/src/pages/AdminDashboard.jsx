@@ -24,10 +24,10 @@ export default function AdminDashboard() {
   });
 
   const stats = [
-    { label: 'Total Drivers', value: drivers.length, icon: '👤', color: 'var(--primary)', action: () => navigate('/admin/drivers') },
-    { label: 'Total Documents', value: documents.length, icon: '📄', color: '#2980b9', action: () => navigate('/admin/documents') },
-    { label: 'Expiring Soon', value: expiringSoon.length, icon: '⚠️', color: 'var(--warning)', action: () => navigate('/admin/documents') },
-    { label: 'Expired', value: expired.length, icon: '❌', color: 'var(--danger)', action: () => navigate('/admin/documents') },
+    { label: 'Total Drivers', value: drivers.length, icon: '', color: 'var(--primary)', action: () => navigate('/admin/drivers') },
+    { label: 'Total Documents', value: documents.length, icon: '', color: '#2980b9', action: () => navigate('/admin/documents') },
+    { label: 'Expiring Soon', value: expiringSoon.length, icon: '', color: 'var(--warning)', action: () => navigate('/admin/documents') },
+    { label: 'Expired', value: expired.length, icon: '', color: 'var(--danger)', action: () => navigate('/admin/documents') },
   ];
 
   return (

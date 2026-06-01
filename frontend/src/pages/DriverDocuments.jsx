@@ -48,7 +48,7 @@ function CountdownTimer({ expiryDate }) {
 }
 
 export default function DriverDocuments() {
-  const { user } = useAuth();
+  const { user, API_BASE } = useAuth();
   const { fetchDriverDocuments } = useData();
 
   const [docs, setDocs] = useState([]);
@@ -96,6 +96,11 @@ export default function DriverDocuments() {
 
     return true;
   });
+
+  const getPhotoUrl = (photoPath) => {
+    if (!photoPath) return '';
+    return photoPath.startsWith('http') ? photoPath : `${API_BASE}${photoPath}`;
+  };
 
   return (
     <div className={styles.page}>
@@ -147,7 +152,7 @@ export default function DriverDocuments() {
               {doc.documentPhoto && (
                 <div className={styles.docPhotoWrap}>
                   <img
-                    src={doc.documentPhoto}
+                    src={getPhotoUrl(doc.documentPhoto)}
                     alt="document"
                     className={styles.docPhoto}
                   />
@@ -231,7 +236,7 @@ export default function DriverDocuments() {
 
             {selected.documentPhoto && (
               <img
-                src={selected.documentPhoto}
+                src={getPhotoUrl(selected.documentPhoto)}
                 alt="document"
                 className={styles.modalPhoto}
               />

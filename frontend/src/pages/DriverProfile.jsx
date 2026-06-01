@@ -16,7 +16,7 @@ const LICENSE_INFO = {
 };
 
 export default function DriverProfile() {
-  const { user, API_BASE, fetchMe } = useAuth();
+  const { user, token, API_BASE, fetchMe } = useAuth();
   const cat = user?.licenseCategory || 'B';
   const licenseInfo = LICENSE_INFO[cat] || LICENSE_INFO['B'];
   const photoRef = useRef();
@@ -43,6 +43,9 @@ export default function DriverProfile() {
 
       const res = await apiFetch(`/drivers/${user.id}/profile`, {
         method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
         body: formData
       });
 

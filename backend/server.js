@@ -123,7 +123,14 @@ app.get('/api/health', (req, res) =>
   res.json({ status: 'ok', message: 'Rwanda Drive API running' })
 );
 
-app.use('/uploads', express.static(uploadsDir));
+app.use(
+  '/uploads',
+  (req, res, next) => {
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    next();
+  },
+  express.static(uploadsDir)
+);
 
 app.use('/admin', express.static(path.join(__dirname, '../admin/dist'), { index: false }));
 app.get(/^\/admin/, (req, res) =>
