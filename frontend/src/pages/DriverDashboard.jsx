@@ -5,8 +5,6 @@ import { useData } from '../context/DataContext';
 import { differenceInDays, parseISO } from 'date-fns';
 import styles from './DriverDashboard.module.css';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 function ExpiryBadge({ expiryDate }) {
   if (!expiryDate) return <span className={styles.badgeNone}>No Expiry</span>;
   const days = differenceInDays(parseISO(expiryDate), new Date());
@@ -16,7 +14,7 @@ function ExpiryBadge({ expiryDate }) {
 }
 
 export default function DriverDashboard() {
-  const { user } = useAuth();
+  const { user, API_BASE } = useAuth();
   const { fetchDriverDocuments } = useData();
   const navigate = useNavigate();
   const [docs, setDocs] = useState([]);
@@ -26,7 +24,7 @@ export default function DriverDashboard() {
     if (user?.id) {
       fetchDriverDocuments(user.id).then(d => { setDocs(d); setLoading(false); }).catch(() => setLoading(false));
     }
-  }, [user]);
+  }, [user, fetchDriverDocuments]);
 
   const expired = docs.filter(d => d.expiryDate && differenceInDays(parseISO(d.expiryDate), new Date()) < 0);
   const expiringSoon = docs.filter(d => d.expiryDate && differenceInDays(parseISO(d.expiryDate), new Date()) >= 0 && differenceInDays(parseISO(d.expiryDate), new Date()) <= 30);

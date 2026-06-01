@@ -53,7 +53,7 @@ export default function DriverProfile() {
       setPhotoPreview(null);
       if (photoRef.current) photoRef.current.value = '';
       // Refresh user context
-      try { await fetchMe(); } catch (e) { /* ignore */ }
+      try { await fetchMe(); } catch { /* ignore */ }
     } catch (err) {
       toast.error(err.message || 'Failed to upload photo');
     } finally {

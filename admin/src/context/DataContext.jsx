@@ -5,6 +5,9 @@ import { apiFetch } from '../utils/apiClient';
 
 const DataContext = createContext(null);
 
+const getId = item => item?.id || item?._id;
+const normalize = item => ({ ...item, id: getId(item) });
+
 export function DataProvider({ children }) {
   const { token } = useAuth();
   const [drivers, setDrivers] = useState([]);
@@ -14,9 +17,6 @@ export function DataProvider({ children }) {
   const authHeaders = useCallback(() => ({
     Authorization: `Bearer ${token}`
   }), [token]);
-
-  const getId = item => item?.id || item?._id;
-  const normalize = item => ({ ...item, id: getId(item) });
 
   // ===== DRIVERS =====
 

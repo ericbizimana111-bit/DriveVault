@@ -14,7 +14,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     fetchDrivers();
     fetchDocuments();
-  }, []);
+  }, [fetchDrivers, fetchDocuments]);
 
   const expired = documents.filter(d => d.expiryDate && differenceInDays(parseISO(d.expiryDate), new Date()) < 0);
   const expiringSoon = documents.filter(d => {
@@ -136,4 +136,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-

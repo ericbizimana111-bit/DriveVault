@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
-import { Eye, EyeOff, Car } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import styles from './Login.module.css';
 
 
@@ -16,7 +16,7 @@ export default function Login() {
   // Redirect if already logged in
   React.useEffect(() => {
     if (user) navigate(user.role === 'admin' ? '/admin' : '/driver-dashboard');
-  }, [user]);
+  }, [user, navigate]);
 
   const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 

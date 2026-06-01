@@ -46,7 +46,7 @@ export default function AdminEditDriver() {
             }
         };
         loadDriver();
-    }, [id]);
+    }, [id, API_BASE, fetchDrivers]);
 
     const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 

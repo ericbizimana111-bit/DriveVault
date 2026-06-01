@@ -24,7 +24,7 @@ export default function Signup() {
 
     React.useEffect(() => {
         if (user) navigate(user.role === 'admin' ? '/admin' : '/driver-dashboard');
-    }, [user]);
+    }, [user, navigate]);
 
     const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 

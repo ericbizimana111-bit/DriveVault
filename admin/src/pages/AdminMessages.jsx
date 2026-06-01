@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { apiFetch } from '../utils/apiClient';
@@ -10,7 +10,7 @@ export default function AdminMessages() {
   const [replyingId, setReplyingId] = useState(null);
   const [reply, setReply] = useState('');
 
-  const fetchMessages = async () => {
+  const fetchMessages = useCallback(async () => {
     setLoading(true);
     try {
       const res = await apiFetch('/messages');
@@ -22,11 +22,11 @@ export default function AdminMessages() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchMessages();
-  }, []);
+  }, [fetchMessages]);
 
   const submitReply = async (id) => {
     if (!reply.trim()) {

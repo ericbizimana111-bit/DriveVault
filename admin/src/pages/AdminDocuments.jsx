@@ -24,7 +24,7 @@ export default function AdminDocuments() {
   const [confirmId, setConfirmId] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-  useEffect(() => { fetchDocuments(); }, []);
+  useEffect(() => { fetchDocuments(); }, [fetchDocuments]);
 
   const filtered = documents.filter(doc => {
     const matchSearch =
