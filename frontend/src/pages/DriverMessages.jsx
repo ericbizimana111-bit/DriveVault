@@ -1,36 +1,27 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import { MessageSquare, RefreshCw, Send } from 'lucide-react';
 import { apiFetch } from '../utils/apiClient';
-import styles from './AdminMessages.module.css';
+import styles from './DriverMessages.module.css';
 
 const formatTime = value => {
   if (!value) return '';
   return format(new Date(value), 'dd MMM yyyy, HH:mm');
 };
 
-export default function AdminMessages() {
-  const [searchParams] = useSearchParams();
-  const requestedDriverId = searchParams.get('driverId');
-  const requestedDriverName = searchParams.get('driverName');
+export default function DriverMessages() {
   const [conversations, setConversations] = useState([]);
   const [selectedId, setSelectedId] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [reply, setReply] = useState('');
+  const [text, setText] = useState('');
   const [loadingConversations, setLoadingConversations] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [sending, setSending] = useState(false);
 
   const selectedConversation = useMemo(
-    () => conversations.find(item => item.conversationId === selectedId) || {
-      conversationId: selectedId,
-      participantName: requestedDriverName,
-      participantEmail: 'New driver conversation',
-      unreadCount: 0
-    },
-    [conversations, selectedId, requestedDriverName]
+    () => conversations.find(item => item.conversationId === selectedId),
+    [conversations, selectedId]
   );
 
   const fetchConversations = useCallback(async ({ silent = false } = {}) => {
@@ -41,13 +32,13 @@ export default function AdminMessages() {
       if (!res.ok) throw new Error(data.message || 'Failed to fetch conversations');
       const list = Array.isArray(data) ? data : [];
       setConversations(list);
-      setSelectedId(current => current || (requestedDriverId ? `driver:${requestedDriverId}` : list[0]?.conversationId || null));
+      setSelectedId(current => current || list[0]?.conversationId || null);
     } catch (error) {
       if (!silent) toast.error(error.message || 'Failed to load conversations');
     } finally {
       if (!silent) setLoadingConversations(false);
     }
-  }, [requestedDriverId]);
+  }, []);
 
   const fetchMessages = useCallback(async (conversationId, { silent = false } = {}) => {
     if (!conversationId) {
@@ -63,7 +54,7 @@ export default function AdminMessages() {
       setMessages(Array.isArray(data) ? data : []);
       fetchConversations({ silent: true });
     } catch (error) {
-      if (!silent) toast.error(error.message || 'Failed to load conversation');
+      if (!silent) toast.error(error.message || 'Failed to load messages');
     } finally {
       if (!silent) setLoadingMessages(false);
     }
@@ -82,26 +73,33 @@ export default function AdminMessages() {
     return () => clearInterval(timer);
   }, [selectedId, fetchMessages]);
 
-  const submitReply = async event => {
+  const sendMessage = async event => {
     event.preventDefault();
-    if (!selectedId || !reply.trim()) {
-      toast.error('Reply text is required');
+    if (!text.trim()) {
+      toast.error('Message text is required');
       return;
     }
 
     setSending(true);
     try {
-      const res = await apiFetch(`/messages/conversations/${encodeURIComponent(selectedId)}/messages`, {
+      const endpoint = selectedId
+        ? `/messages/conversations/${encodeURIComponent(selectedId)}/messages`
+        : '/messages/conversations';
+      const res = await apiFetch(endpoint, {
         method: 'POST',
-        body: JSON.stringify({ content: reply })
+        body: JSON.stringify({ content: text, subject: 'Driver communication' })
       });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || 'Failed to send reply');
-      setReply('');
-      await fetchMessages(selectedId, { silent: true });
-      toast.success('Reply sent');
+      if (!res.ok) throw new Error(data.message || 'Failed to send message');
+
+      const conversationId = data.conversationId || selectedId;
+      setText('');
+      setSelectedId(conversationId);
+      await fetchConversations({ silent: true });
+      if (conversationId) await fetchMessages(conversationId, { silent: true });
+      toast.success('Message sent');
     } catch (error) {
-      toast.error(error.message || 'Failed to send reply');
+      toast.error(error.message || 'Failed to send message');
     } finally {
       setSending(false);
     }
@@ -112,7 +110,7 @@ export default function AdminMessages() {
       <div className={styles.pageHeader}>
         <div>
           <h1><MessageSquare size={24} /> <span>Communication</span></h1>
-          <p>{conversations.length} active conversation(s)</p>
+          <p>Send and receive messages with the administrators.</p>
         </div>
         <button className={styles.refreshBtn} onClick={() => fetchConversations()}>
           <RefreshCw size={16} />
@@ -125,7 +123,16 @@ export default function AdminMessages() {
           {loadingConversations ? (
             <div className={styles.stateText}>Loading conversations...</div>
           ) : conversations.length === 0 ? (
-            <div className={styles.stateText}>No driver messages yet.</div>
+            <button
+              type="button"
+              className={`${styles.conversationItem} ${styles.active}`}
+              onClick={() => setSelectedId(null)}
+            >
+              <div className={styles.conversationTop}>
+                <strong>Administrators</strong>
+              </div>
+              <p>Start a new message</p>
+            </button>
           ) : conversations.map(conversation => (
             <button
               type="button"
@@ -134,7 +141,7 @@ export default function AdminMessages() {
               onClick={() => setSelectedId(conversation.conversationId)}
             >
               <div className={styles.conversationTop}>
-                <strong>{conversation.participantName || 'Driver'}</strong>
+                <strong>{conversation.participantName || 'Administrators'}</strong>
                 {conversation.unreadCount > 0 && <span>{conversation.unreadCount}</span>}
               </div>
               <p>{conversation.lastMessage}</p>
@@ -144,58 +151,52 @@ export default function AdminMessages() {
         </aside>
 
         <section className={styles.chatPanel}>
-          {!selectedId ? (
-            <div className={styles.emptyChat}>Select a conversation to send a message.</div>
-          ) : (
-            <>
-              <div className={styles.chatHeader}>
-                <div>
-                  <h2>{selectedConversation?.participantName || 'Driver'}</h2>
-                  <p>{selectedConversation?.participantEmail || selectedConversation?.subject || 'Support conversation'}</p>
-                </div>
-                {selectedConversation?.unreadCount > 0 && (
-                  <span className={styles.unreadBadge}>{selectedConversation.unreadCount} unread</span>
-                )}
-              </div>
+          <div className={styles.chatHeader}>
+            <div>
+              <h2>{selectedConversation?.participantName || 'Administrators'}</h2>
+              <p>{selectedConversation?.subject || 'Driver communication'}</p>
+            </div>
+            {selectedConversation?.unreadCount > 0 && (
+              <span className={styles.unreadBadge}>{selectedConversation.unreadCount} unread</span>
+            )}
+          </div>
 
-              <div className={styles.messages}>
-                {loadingMessages ? (
-                  <div className={styles.stateText}>Loading messages...</div>
-                ) : messages.length === 0 ? (
-                  <div className={styles.stateText}>No messages in this conversation.</div>
-                ) : messages.map(message => {
-                  const mine = message.senderRole === 'admin';
-                  return (
-                    <div
-                      key={message.id || message._id}
-                      className={`${styles.messageRow} ${mine ? styles.mine : styles.theirs}`}
-                    >
-                      <div className={styles.bubble}>
-                        <div className={styles.meta}>
-                          <strong>{mine ? 'Admin' : message.senderName || 'Driver'}</strong>
-                          <span>{formatTime(message.createdAt)}</span>
-                        </div>
-                        <p>{message.content || message.message}</p>
-                      </div>
+          <div className={styles.messages}>
+            {loadingMessages ? (
+              <div className={styles.stateText}>Loading messages...</div>
+            ) : messages.length === 0 ? (
+              <div className={styles.emptyChat}>Write a message below to start the conversation.</div>
+            ) : messages.map(message => {
+              const mine = message.senderRole === 'user';
+              return (
+                <div
+                  key={message.id || message._id}
+                  className={`${styles.messageRow} ${mine ? styles.mine : styles.theirs}`}
+                >
+                  <div className={styles.bubble}>
+                    <div className={styles.meta}>
+                      <strong>{mine ? 'You' : message.senderName || 'Admin'}</strong>
+                      <span>{formatTime(message.createdAt)}</span>
                     </div>
-                  );
-                })}
-              </div>
+                    <p>{message.content || message.message}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
-              <form className={styles.replyBox} onSubmit={submitReply}>
-                <textarea
-                  value={reply}
-                  onChange={event => setReply(event.target.value)}
-                  placeholder="Type your message..."
-                  rows={3}
-                />
-                <button type="submit" disabled={sending || !reply.trim()}>
-                  <Send size={16} />
-                  <span>{sending ? 'Sending...' : 'Send Message'}</span>
-                </button>
-              </form>
-            </>
-          )}
+          <form className={styles.replyBox} onSubmit={sendMessage}>
+            <textarea
+              value={text}
+              onChange={event => setText(event.target.value)}
+              placeholder="Type your message..."
+              rows={3}
+            />
+            <button type="submit" disabled={sending || !text.trim()}>
+              <Send size={16} />
+              <span>{sending ? 'Sending...' : 'Send Message'}</span>
+            </button>
+          </form>
         </section>
       </div>
     </div>

@@ -1,5 +1,7 @@
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider } from './context/AuthContext';
 import { DataProvider } from './context/DataContext';
@@ -11,6 +13,7 @@ import AdminEditDriver from './pages/AdminEditDriver';
 import AdminDocuments from './pages/AdminDocuments';
 import AdminAddDocument from './pages/AdminAddDocument';
 import AdminMessages from './pages/AdminMessages';
+import AdminNotifications from './pages/AdminNotifications';
 import AdminLayout from './components/AdminLayout';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 
@@ -34,11 +37,13 @@ const App = () => {
                   <Route path="/admin/documents" element={<AdminDocuments />} />
                   <Route path="/admin/documents/add" element={<AdminAddDocument />} />
                   <Route path="/admin/messages" element={<AdminMessages />} />
+                  <Route path="/admin/notifications" element={<AdminNotifications />} />
                 </Route>
               </Route>
 
               <Route path="*" element={<Navigate to="/admin/login" replace />} />
             </Routes>
+            <ToastContainer position="top-right" autoClose={3000} />
           </DataProvider>
         </AuthProvider>
       </BrowserRouter>

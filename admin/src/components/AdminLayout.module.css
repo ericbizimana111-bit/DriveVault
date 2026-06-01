@@ -23,7 +23,7 @@
 }
 
 .logo { display: flex; align-items: center; gap: 10px; overflow: hidden; }
-.logoIcon { font-size: 1.4rem; flex-shrink: 0; }
+.logoIcon { color: var(--accent); flex-shrink: 0; }
 .logoMain { color: white; font-size: 0.85rem; font-weight: 700; white-space: nowrap; line-height: 1.2; }
 .logoSub { color: var(--accent); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 
@@ -35,6 +35,9 @@
   border-radius: 6px;
   font-size: 0.8rem;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .toggle:hover { background: rgba(255,255,255,0.15); }
 
@@ -79,6 +82,40 @@
 
 .navIcon { font-size: 1rem; flex-shrink: 0; }
 
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navBadge,
+.topbarBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.navBadge {
+  position: absolute;
+  top: -9px;
+  right: -11px;
+  border: 2px solid #0f1f17;
+}
+
+.navItem.active .navBadge {
+  border-color: var(--accent);
+}
+
 .sidebarBottom {
   padding: 12px 8px;
   border-top: 1px solid rgba(255,255,255,0.08);
@@ -90,7 +127,10 @@
 .quickLinks { display: flex; flex-direction: column; gap: 6px; margin-bottom: 4px; }
 
 .quickBtn {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   background: rgba(232,160,32,0.15);
   color: var(--accent);
   border: 1px solid rgba(232,160,32,0.25);
@@ -146,9 +186,35 @@
   border-radius: 100px;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .topbarTitle { font-size: 0.9rem; font-weight: 600; color: var(--text-muted); }
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbarBtn {
+  background: #f8faf8;
+  border: 1px solid var(--border);
+  color: var(--primary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.topbarBtn:hover {
+  border-color: var(--accent);
+}
 
 .topbarUser { font-size: 0.88rem; color: var(--primary); font-weight: 600; }
 
@@ -157,4 +223,8 @@
 @media (max-width: 768px) {
   .sidebar { width: 64px; }
   .content { margin-left: 64px; }
+  .topbar { padding: 0 16px; }
+  .topbarTitle,
+  .topbarUser,
+  .topbarBtn span:not(.topbarBadge) { display: none; }
 }

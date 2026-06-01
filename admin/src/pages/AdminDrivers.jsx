@@ -1,7 +1,7 @@
-
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { FilePlus, MessageSquare, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
 import styles from './AdminDrivers.module.css';
@@ -23,7 +23,7 @@ export default function AdminDrivers() {
     d.nationalId?.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     try {
       await deleteDriver(id);
       toast.success('Driver deleted successfully');
@@ -41,19 +41,23 @@ export default function AdminDrivers() {
           <p>{drivers.length} registered driver(s) in the system</p>
         </div>
         <button className={styles.addBtn} onClick={() => navigate('/admin/drivers/add')}>
-          + Add New Driver
+          <Plus size={17} />
+          <span>Add New Driver</span>
         </button>
       </div>
 
       <div className={styles.searchBar}>
-      
         <input
           type="text"
           placeholder="Search by name, email or National ID..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        {search && <button className={styles.clearBtn} onClick={() => setSearch('')}>✕</button>}
+        {search && (
+          <button className={styles.clearBtn} onClick={() => setSearch('')} aria-label="Clear search">
+            <X size={16} />
+          </button>
+        )}
       </div>
 
       {loading ? (
@@ -61,7 +65,7 @@ export default function AdminDrivers() {
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
           <p>{search ? 'No drivers match your search.' : 'No drivers registered yet.'}</p>
-          {!search && <button onClick={() => navigate('/admin/drivers/add')}>Add First Driver →</button>}
+          {!search && <button onClick={() => navigate('/admin/drivers/add')}>Add First Driver</button>}
         </div>
       ) : (
         <div className={styles.tableWrap}>
@@ -93,15 +97,28 @@ export default function AdminDrivers() {
                       </div>
                     </div>
                   </td>
-                  <td><code>{driver.nationalId || '—'}</code></td>
-                  <td>{driver.phone || '—'}</td>
+                  <td><code>{driver.nationalId || '-'}</code></td>
+                  <td>{driver.phone || '-'}</td>
                   <td><span className={styles.catBadge}>{driver.licenseCategory || 'B'}</span></td>
-                  <td>{driver.createdAt ? new Date(driver.createdAt).toLocaleDateString() : '—'}</td>
+                  <td>{driver.createdAt ? new Date(driver.createdAt).toLocaleDateString() : '-'}</td>
                   <td>
                     <div className={styles.actions}>
-                      <button className={styles.editBtn} onClick={() => navigate(`/admin/drivers/${getId(driver)}/edit`)}>Edit</button>
-                      <button className={styles.docBtn} onClick={() => navigate(`/admin/documents/add?driverId=${getId(driver)}&driverName=${encodeURIComponent(driver.name)}`)}>+ Doc</button>
-                      <button className={styles.deleteBtn} onClick={() => setConfirmId(getId(driver))}>Delete</button>
+                      <button className={styles.editBtn} onClick={() => navigate(`/admin/drivers/${getId(driver)}/edit`)}>
+                        <Pencil size={14} />
+                        <span>Edit</span>
+                      </button>
+                      <button className={styles.messageBtn} onClick={() => navigate(`/admin/messages?driverId=${getId(driver)}&driverName=${encodeURIComponent(driver.name || 'Driver')}`)}>
+                        <MessageSquare size={14} />
+                        <span>Chat</span>
+                      </button>
+                      <button className={styles.docBtn} onClick={() => navigate(`/admin/documents/add?driverId=${getId(driver)}&driverName=${encodeURIComponent(driver.name)}`)}>
+                        <FilePlus size={14} />
+                        <span>Doc</span>
+                      </button>
+                      <button className={styles.deleteBtn} onClick={() => setConfirmId(getId(driver))}>
+                        <Trash2 size={14} />
+                        <span>Delete</span>
+                      </button>
                     </div>
                   </td>
                 </tr>

@@ -34,6 +34,9 @@
   font-family: inherit;
   white-space: nowrap;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .addBtn:hover {
@@ -76,6 +79,9 @@
   border: none;
   color: var(--text-muted);
   font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .loading {
@@ -233,10 +239,33 @@
   font-weight: 700;
   font-family: inherit;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .docBtn:hover {
   background: rgba(232, 160, 32, 0.25);
+}
+
+.messageBtn {
+  background: #e8f4fd;
+  color: #1f5f8f;
+  border: 1px solid #b8daf3;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.messageBtn:hover {
+  background: #d6ecfb;
+  border-color: #3498db;
 }
 
 .editBtn {
@@ -246,6 +275,9 @@
   border-radius: 6px;
   font-size: 0.85rem;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .editBtn:hover {
@@ -260,6 +292,9 @@
   border-radius: 6px;
   font-size: 0.85rem;
   transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .deleteBtn:hover {

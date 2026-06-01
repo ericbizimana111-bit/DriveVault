@@ -152,8 +152,8 @@
 
 .catBadge {
   display: inline-block;
-  background: var(--primary);
-  color: var(--accent);
+  background: rgb(255, 255, 0);
+  color: rgb(85, 0, 255);
   font-family: 'IBM Plex Mono', monospace;
   padding: 2px 12px;
   border-radius: 6px;

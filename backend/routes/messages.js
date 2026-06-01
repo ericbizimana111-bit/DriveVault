@@ -18,6 +18,10 @@ const adminOnly = (req, res, next) => {
 const getId = value => value?._id || value?.id || value;
 const conversationForUser = userId => `driver:${userId}`;
 const conversationForGuest = email => `guest:${String(email || 'unknown').toLowerCase().trim()}`;
+const userIdFromConversation = conversationId => {
+    const match = String(conversationId || '').match(/^driver:(.+)$/);
+    return match?.[1] || null;
+};
 
 const normalizeConversationId = message => (
     message.conversationId ||
@@ -300,6 +304,77 @@ router.get('/conversations/:conversationId', auth, async (req, res) => {
     }
 });
 
+router.post('/conversations', auth, async (req, res) => {
+    try {
+        const content = String(req.body.content || req.body.message || '').trim();
+        if (!content) return res.status(400).json({ message: 'Message content is required' });
+
+        const sender = await User.findById(req.user.id).select('name email role');
+        let receiver = null;
+        let receiverRole = 'admin';
+        let conversationId = conversationForUser(req.user.id);
+
+        if (req.user.role === 'admin') {
+            const receiverId = req.body.receiverId || userIdFromConversation(req.body.conversationId);
+            if (!receiverId || !mongoose.Types.ObjectId.isValid(receiverId)) {
+                return res.status(400).json({ message: 'Driver is required' });
+            }
+
+            receiver = await User.findOne({ _id: receiverId, role: 'user' }).select('name email role');
+            if (!receiver) return res.status(404).json({ message: 'Driver not found' });
+
+            receiverRole = 'user';
+            conversationId = conversationForUser(receiver._id);
+        } else {
+            receiver = await findPrimaryAdmin();
+        }
+
+        const result = await createMessage({
+            conversationId,
+            sender,
+            receiver,
+            senderRole: req.user.role,
+            receiverRole,
+            subject: req.body.subject || 'Communication',
+            content,
+            category: req.body.category || 'communication',
+            req
+        });
+
+        if (receiver) {
+            await Notification.create({
+                userId: receiver._id,
+                type: req.user.role === 'admin' ? 'admin_reply' : 'message',
+                title: req.user.role === 'admin' ? 'New admin message' : 'New driver message',
+                message: `${sender.name} sent a message: ${content.slice(0, 80)}`,
+                messageId: result.message._id,
+                relatedId: conversationId,
+                relatedType: 'message',
+                actionUrl: req.user.role === 'admin' ? '/messages' : '/admin/messages'
+            });
+        } else {
+            const admins = await User.find({ role: 'admin' }).select('_id');
+            await notifyUsers(admins, {
+                type: 'message',
+                title: 'New driver message',
+                message: `${sender.name} sent a message`,
+                messageId: result.message._id,
+                relatedId: conversationId,
+                relatedType: 'message',
+                actionUrl: '/admin/messages'
+            });
+        }
+
+        res.status(result.duplicate ? 200 : 201).json({
+            conversationId,
+            data: serializeMessage(result.message)
+        });
+    } catch (err) {
+        console.error('Start conversation error:', err);
+        res.status(500).json({ message: 'Server error starting conversation' });
+    }
+});
+
 router.post('/conversations/:conversationId/messages', auth, async (req, res) => {
     try {
         const { conversationId } = req.params;
@@ -329,6 +404,13 @@ router.post('/conversations/:conversationId/messages', auth, async (req, res) =>
 
             if (receiverId && mongoose.Types.ObjectId.isValid(receiverId)) {
                 receiver = await User.findById(receiverId).select('name email role');
+            }
+
+            if (!receiver) {
+                const conversationUserId = userIdFromConversation(conversationId);
+                if (conversationUserId && mongoose.Types.ObjectId.isValid(conversationUserId)) {
+                    receiver = await User.findOne({ _id: conversationUserId, role: 'user' }).select('name email role');
+                }
             }
             receiverRole = receiver ? 'user' : 'guest';
         } else {

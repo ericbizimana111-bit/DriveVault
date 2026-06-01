@@ -46,6 +46,9 @@
   border-radius: 6px;
   font-size: 0.85rem;
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 .toggle:hover { background: rgba(255,255,255,0.2); }
 
@@ -91,6 +94,40 @@
 
 .navIcon { font-size: 1.1rem; flex-shrink: 0; }
 
+.iconWrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.navBadge,
+.topbarBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: var(--danger);
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.navBadge {
+  position: absolute;
+  top: -9px;
+  right: -11px;
+  border: 2px solid var(--primary);
+}
+
+.navItem.active .navBadge {
+  border-color: var(--accent);
+}
+
 .sidebarBottom { padding: 16px 8px; border-top: 1px solid rgba(255,255,255,0.1); }
 
 .logoutBtn {
@@ -126,6 +163,30 @@
 
 .pageTitle { font-size: 1rem; font-weight: 600; color: var(--primary); }
 
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbarBtn {
+  background: #f8faf8;
+  border: 1px solid var(--border);
+  color: var(--primary);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  position: relative;
+}
+
+.topbarBtn:hover {
+  border-color: var(--accent);
+}
+
 .greeting { color: var(--text-muted); font-size: 0.9rem; }
 
 .main { padding: 32px; flex: 1; }
@@ -133,5 +194,7 @@
 @media (max-width: 768px) {
   .sidebar { width: 64px; }
   .content { margin-left: 64px; }
-  .logo .logoText, .profile, .nav span:not(.navIcon), .logoutBtn span:not(:first-child) { display: none; }
+  .logo .logoText, .profile, .navItem > span:last-child, .logoutBtn span { display: none; }
+  .topbar { padding: 0 16px; }
+  .greeting { display: none; }
 }

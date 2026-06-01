@@ -17,6 +17,8 @@ import VerifyEmail from './pages/VerifyEmail';
 // Driver Pages
 import DriverDashboard from './pages/DriverDashboard';
 import DriverDocuments from './pages/DriverDocuments';
+import DriverMessages from './pages/DriverMessages';
+import Notifications from './pages/Notifications';
 import DriverProfile from './pages/DriverProfile';
 
 // Layout
@@ -45,6 +47,8 @@ export default function App() {
               <Route element={<DriverLayout />}>
                 <Route path="/driver-dashboard" element={<DriverDashboard />} />
                 <Route path="/my-documents" element={<DriverDocuments />} />
+                <Route path="/messages" element={<DriverMessages />} />
+                <Route path="/notifications" element={<Notifications />} />
                 <Route path="/profile" element={<DriverProfile />} />
               </Route>
             </Route>

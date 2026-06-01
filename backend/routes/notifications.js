@@ -49,4 +49,22 @@ router.patch('/:id/read', auth, async (req, res) => {
     }
 });
 
+// Mark all notifications, or notifications for a related resource, as read.
+router.patch('/read-all', auth, async (req, res) => {
+    try {
+        const query = { userId: req.user.id, isRead: false };
+        if (req.body?.relatedId) query.relatedId = req.body.relatedId;
+        if (req.body?.relatedType) query.relatedType = req.body.relatedType;
+
+        const result = await Notification.updateMany(query, {
+            $set: { isRead: true, readAt: new Date() }
+        });
+
+        res.json({ message: 'Notifications marked as read', modifiedCount: result.modifiedCount });
+    } catch (err) {
+        console.error('Mark notifications read error:', err);
+        res.status(500).json({ message: 'Server error updating notifications' });
+    }
+});
+
 module.exports = router;
