@@ -75,6 +75,7 @@ mongoose.connect(MONGO_URI)
   .then(async () => {
     console.log('MongoDB Connected');
     await bootstrapAdmin();
+    app.listen(PORT, () => console.log(`Rwanda Drive Backend running on port ${PORT}`));
   })
   .catch(err => { console.error('DB Error:', err); process.exit(1); });
 
@@ -152,7 +153,5 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({ message: err.message || 'Internal server error' });
 });
-
-app.listen(PORT, () => console.log(`Rwanda Drive Backend running on port ${PORT}`));
 
 module.exports = app;
