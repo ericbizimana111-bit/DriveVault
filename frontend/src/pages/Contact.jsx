@@ -33,14 +33,16 @@ export default function Contact() {
     }
 
     try {
-      await apiFetch('/messages', {
+      const res = await apiFetch('/messages', {
         method: 'POST',
         body: JSON.stringify(form)
       });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || 'Failed to send message');
       toast.success('Message sent! We\'ll respond within 24 hours.');
       setSent(true);
     } catch (error) {
-      toast.error('Failed to send message. Please try again.');
+      toast.error(error.message || 'Failed to send message. Please try again.');
       console.error('Contact form error:', error);
     }
   };

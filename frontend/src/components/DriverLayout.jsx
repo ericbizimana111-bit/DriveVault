@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import styles from './DriverLayout.module.css';
 
 export default function DriverLayout() {
-  const { user, logout } = useAuth();
+  const { user, logout, API_BASE } = useAuth();
   const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
 
@@ -27,7 +27,7 @@ export default function DriverLayout() {
           <div className={styles.profile}>
             <div className={styles.avatar}>
               {user?.photo
-                ? <img src={`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${user.photo}`} alt="avatar" />
+                ? <img src={`${API_BASE}${user.photo}`} alt="avatar" />
                 : <span>{user?.name?.charAt(0)?.toUpperCase()}</span>
               }
             </div>

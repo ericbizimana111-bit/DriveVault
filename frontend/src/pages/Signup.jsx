@@ -37,7 +37,10 @@ export default function Signup() {
 
     const validateStep2 = () => {
         if (!form.nationalId.trim()) return toast.error('National ID is required') || false;
-        if (form.password.length < 6) return toast.error('Password must be at least 6 characters') || false;
+        if (form.password.length < 8) return toast.error('Password must be at least 8 characters') || false;
+        if (!/[A-Z]/.test(form.password) || !/[0-9]/.test(form.password) || !/[^A-Za-z0-9]/.test(form.password)) {
+            return toast.error('Password needs an uppercase letter, a number, and a special character') || false;
+        }
         if (form.password !== form.confirm) return toast.error('Passwords do not match') || false;
         return true;
     };
@@ -191,7 +194,7 @@ export default function Signup() {
                                         name="password"
                                         value={form.password}
                                         onChange={handleChange}
-                                        placeholder="Min. 6 characters"
+                                        placeholder="Min. 8 chars, A-Z, 0-9, symbol"
                                         autoComplete="new-password"
                                         required
                                     />
@@ -252,7 +255,7 @@ export default function Signup() {
 /* ── Password strength indicator ── */
 function StrengthBar({ password }) {
     const checks = [
-        password.length >= 6,
+        password.length >= 8,
         /[A-Z]/.test(password),
         /[0-9]/.test(password),
         /[^A-Za-z0-9]/.test(password),

@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
+
+import  { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { differenceInDays, parseISO, format } from 'date-fns';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 import styles from './AdminDocuments.module.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function ExpiryBadge({ expiryDate }) {
   if (!expiryDate) return <span className={`${styles.badge} ${styles.badgeNone}`}>No Expiry</span>;
@@ -17,6 +17,7 @@ function ExpiryBadge({ expiryDate }) {
 
 export default function AdminDocuments() {
   const { documents, fetchDocuments, deleteDocument, loading } = useData();
+  const { API_BASE } = useAuth();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
@@ -30,9 +31,7 @@ export default function AdminDocuments() {
       doc.documentType?.toLowerCase().includes(search.toLowerCase()) ||
       doc.driverName?.toLowerCase().includes(search.toLowerCase()) ||
       doc.documentNumber?.toLowerCase().includes(search.toLowerCase());
-
     if (!matchSearch) return false;
-
     if (filterStatus === 'all') return true;
     if (!doc.expiryDate) return filterStatus === 'valid';
     const days = differenceInDays(parseISO(doc.expiryDate), new Date());
@@ -64,16 +63,14 @@ export default function AdminDocuments() {
         </button>
       </div>
 
-      {/* Filters */}
       <div className={styles.toolbar}>
         <div className={styles.searchBar}>
-          <span></span>
           <input
             placeholder="Search by document, driver, or number..."
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
-          {search && <button onClick={() => setSearch('')}></button>}
+          {search && <button onClick={() => setSearch('')}>✕</button>}
         </div>
         <div className={styles.statusFilters}>
           {['all', 'valid', 'expiring', 'expired'].map(f => (
@@ -92,7 +89,6 @@ export default function AdminDocuments() {
         <div className={styles.loading}>Loading documents...</div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <div></div>
           <p>{documents.length === 0 ? 'No documents yet.' : 'No documents match your filters.'}</p>
           {documents.length === 0 && (
             <button onClick={() => navigate('/admin/documents/add')}>Add First Document →</button>
@@ -137,7 +133,7 @@ export default function AdminDocuments() {
                   <td>{doc.expiryDate ? format(parseISO(doc.expiryDate), 'dd MMM yyyy') : '—'}</td>
                   <td><code className={styles.payCode}>{doc.paymentCode}</code></td>
                   <td>
-                    <button className={styles.deleteBtn} onClick={() => setConfirmId(doc.id)} title="Delete">Delete</button>
+                    <button className={styles.deleteBtn} onClick={() => setConfirmId(doc.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
@@ -146,21 +142,18 @@ export default function AdminDocuments() {
         </div>
       )}
 
-      {/* Photo Preview Modal */}
       {selectedPhoto && (
         <div className={styles.photoOverlay} onClick={() => setSelectedPhoto(null)}>
           <div className={styles.photoModal}>
-            <button className={styles.closeBtn} onClick={() => setSelectedPhoto(null)}></button>
+            <button className={styles.closeBtn} onClick={() => setSelectedPhoto(null)}>✕</button>
             <img src={selectedPhoto} alt="document" />
           </div>
         </div>
       )}
 
-      {/* Confirm Delete */}
       {confirmId && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
-            <div></div>
             <h3>Delete Document?</h3>
             <p>This will permanently remove the document from the system.</p>
             <div className={styles.modalActions}>

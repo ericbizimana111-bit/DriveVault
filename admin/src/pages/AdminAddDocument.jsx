@@ -2,18 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 import styles from './AdminAddDocument.module.css';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 const DOC_TYPES = [
-  'Driving License',
-  'Vehicle Registration (Carte Jaune)',
-  'Vehicle Insurance',
-  'Motor Vehicle Inspection Certificate',
-  'National ID',
-  'International Driving Permit',
-  'Rental Agreement'
+  'Driving License', 'Vehicle Registration (Carte Jaune)', 'Vehicle Insurance',
+  'Motor Vehicle Inspection Certificate', 'National ID',
+  'International Driving Permit', 'Rental Agreement'
 ];
 
 const getId = item => item?.id || item?._id;
@@ -21,6 +16,7 @@ const makePaymentCode = () => `RWD-${Math.random().toString(36).slice(2, 8).toUp
 
 export default function AdminAddDocument() {
   const { drivers, fetchDrivers, addDocument } = useData();
+  const { API_BASE } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const photoRef = useRef();
@@ -52,15 +48,13 @@ export default function AdminAddDocument() {
     setPhotoPreview(URL.createObjectURL(file));
   };
 
-  const regenerateCode = () => {
-    setForm(prev => ({ ...prev, paymentCode: `RWD-${Math.random().toString(36).slice(2, 8).toUpperCase()}` }));
-  };
+  const regenerateCode = () => setForm(prev => ({
+    ...prev, paymentCode: `RWD-${Math.random().toString(36).slice(2, 8).toUpperCase()}`
+  }));
 
   const handleSubmit = async e => {
     e.preventDefault();
     if (!form.driverId) return toast.error('Please select a driver');
-    if (!form.documentType) return toast.error('Please select a document type');
-
     setLoading(true);
     try {
       const formData = new FormData();
@@ -89,20 +83,13 @@ export default function AdminAddDocument() {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.formGrid}>
-        {/* LEFT: Document Photo */}
         <div className={styles.leftCol}>
           <div className={styles.photoCard}>
             <h3>Document Photo</h3>
             <div className={styles.photoWrap} onClick={() => photoRef.current.click()}>
               {photoPreview
                 ? <img src={photoPreview} alt="preview" className={styles.photoPreview} />
-                : (
-                  <div className={styles.photoPlaceholder}>
-                    <span></span>
-                    <p>Click to upload document image</p>
-                    <small>Photo of the physical document</small>
-                  </div>
-                )
+                : <div className={styles.photoPlaceholder}><p>Click to upload document image</p></div>
               }
             </div>
             <input type="file" accept="image/*" ref={photoRef} onChange={handlePhoto} style={{ display: 'none' }} />
@@ -110,13 +97,10 @@ export default function AdminAddDocument() {
               {photoPreview ? 'Change Photo' : 'Upload Document Photo'}
             </button>
             {photoPreview && (
-              <button type="button" className={styles.removeBtn} onClick={() => { setPhoto(null); setPhotoPreview(null); }}>
-                Remove
-              </button>
+              <button type="button" className={styles.removeBtn} onClick={() => { setPhoto(null); setPhotoPreview(null); }}>Remove</button>
             )}
           </div>
 
-          {/* Driver Preview */}
           {(selectedDriver || prefillDriverName) && (
             <div className={styles.driverPreview}>
               <div className={styles.driverPreviewAvatar}>
@@ -134,9 +118,7 @@ export default function AdminAddDocument() {
           )}
         </div>
 
-        {/* RIGHT: Form */}
         <div className={styles.formFields}>
-          {/* Driver Selection */}
           <div className={styles.section}>
             <h3>Select Driver *</h3>
             {prefillDriverId ? (
@@ -149,49 +131,32 @@ export default function AdminAddDocument() {
                 <label>Driver</label>
                 <select name="driverId" value={form.driverId} onChange={handleChange} required>
                   <option value="">— Select a driver —</option>
-                  {drivers.map(d => {
-                    const driverId = getId(d);
-                    return (
-                      <option key={driverId} value={driverId}>{d.name} ({d.email})</option>
-                    );
-                  })}
+                  {drivers.map(d => (
+                    <option key={getId(d)} value={getId(d)}>{d.name} ({d.email})</option>
+                  ))}
                 </select>
               </div>
             )}
           </div>
 
-          {/* Document Details */}
           <div className={styles.section}>
             <h3>Document Details</h3>
-
             <div className={styles.field}>
               <label>Document Type *</label>
               <select name="documentType" value={form.documentType} onChange={handleChange} required>
                 {DOC_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
               </select>
             </div>
-
             <div className={styles.row}>
               <div className={styles.field}>
                 <label>Document Number</label>
-                <input
-                  name="documentNumber"
-                  value={form.documentNumber}
-                  onChange={handleChange}
-                  placeholder="Auto-generated if empty"
-                />
+                <input name="documentNumber" value={form.documentNumber} onChange={handleChange} placeholder="Auto-generated if empty" />
               </div>
               <div className={styles.field}>
                 <label>Issued By</label>
-                <input
-                  name="issuedBy"
-                  value={form.issuedBy}
-                  onChange={handleChange}
-                  placeholder="Rwanda National Police"
-                />
+                <input name="issuedBy" value={form.issuedBy} onChange={handleChange} placeholder="Rwanda National Police" />
               </div>
             </div>
-
             <div className={styles.row}>
               <div className={styles.field}>
                 <label>Issue Date *</label>
@@ -205,22 +170,15 @@ export default function AdminAddDocument() {
             </div>
           </div>
 
-          {/* Payment Code */}
           <div className={styles.section}>
             <h3>Payment Code</h3>
             <div className={styles.field}>
               <label>Payment Code for Renewal</label>
               <div className={styles.codeRow}>
-                <input
-                  name="paymentCode"
-                  value={form.paymentCode}
-                  onChange={handleChange}
-                  className={styles.codeInput}
-                  placeholder="RWD-XXXXXX"
-                />
+                <input name="paymentCode" value={form.paymentCode} onChange={handleChange} className={styles.codeInput} placeholder="RWD-XXXXXX" />
                 <button type="button" className={styles.regenBtn} onClick={regenerateCode}>Generate</button>
               </div>
-              <small className={styles.hint}>This code is used by the driver to pay for document renewal at authorized payment points.</small>
+              <small className={styles.hint}>Used by the driver to pay for document renewal at authorized payment points.</small>
             </div>
           </div>
 

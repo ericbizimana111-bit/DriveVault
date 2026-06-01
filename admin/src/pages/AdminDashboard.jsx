@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+
+import  { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 import { differenceInDays, parseISO } from 'date-fns';
 import styles from './AdminDashboard.module.css';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-
 export default function AdminDashboard() {
   const { drivers, documents, fetchDrivers, fetchDocuments, loading } = useData();
+  const { API_BASE } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,13 +17,17 @@ export default function AdminDashboard() {
   }, []);
 
   const expired = documents.filter(d => d.expiryDate && differenceInDays(parseISO(d.expiryDate), new Date()) < 0);
-  const expiringSoon = documents.filter(d => d.expiryDate && differenceInDays(parseISO(d.expiryDate), new Date()) >= 0 && differenceInDays(parseISO(d.expiryDate), new Date()) <= 30);
+  const expiringSoon = documents.filter(d => {
+    if (!d.expiryDate) return false;
+    const days = differenceInDays(parseISO(d.expiryDate), new Date());
+    return days >= 0 && days <= 30;
+  });
 
   const stats = [
-    { label: 'Total Drivers', value: drivers.length, icon: '', color: 'var(--primary)', action: () => navigate('/admin/drivers') },
-    { label: 'Total Documents', value: documents.length, icon: '', color: '#2980b9', action: () => navigate('/admin/documents') },
-    { label: 'Expiring Soon', value: expiringSoon.length, icon: '', color: 'var(--warning)', action: () => navigate('/admin/documents') },
-    { label: 'Expired', value: expired.length, icon: '', color: 'var(--danger)', action: () => navigate('/admin/documents') },
+    { label: 'Total Drivers', value: drivers.length, icon: '👤', color: 'var(--primary)', action: () => navigate('/admin/drivers') },
+    { label: 'Total Documents', value: documents.length, icon: '📄', color: '#2980b9', action: () => navigate('/admin/documents') },
+    { label: 'Expiring Soon', value: expiringSoon.length, icon: '⚠️', color: 'var(--warning)', action: () => navigate('/admin/documents') },
+    { label: 'Expired', value: expired.length, icon: '❌', color: 'var(--danger)', action: () => navigate('/admin/documents') },
   ];
 
   return (
@@ -38,7 +43,6 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      {/* Stats */}
       <div className={styles.statsGrid}>
         {stats.map((s, i) => (
           <div className={styles.statCard} key={i} onClick={s.action} style={{ borderTop: `3px solid ${s.color}` }}>
@@ -51,7 +55,6 @@ export default function AdminDashboard() {
         ))}
       </div>
 
-      {/* Alerts */}
       {expired.length > 0 && (
         <div className={styles.alertDanger}>
           <strong>{expired.length} expired document(s)</strong> require immediate attention.
@@ -66,7 +69,6 @@ export default function AdminDashboard() {
       )}
 
       <div className={styles.mainGrid}>
-        {/* Recent Drivers */}
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
             <h2>Recent Drivers</h2>
@@ -97,7 +99,6 @@ export default function AdminDashboard() {
           )}
         </div>
 
-        {/* Recent Documents */}
         <div className={styles.panel}>
           <div className={styles.panelHeader}>
             <h2>Recent Documents</h2>
@@ -135,3 +136,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+

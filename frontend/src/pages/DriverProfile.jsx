@@ -2,9 +2,8 @@
 import { useState, useRef } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import { apiFetch } from '../utils/apiClient';
 import styles from './DriverProfile.module.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const LICENSE_INFO = {
   A: { label: 'Motorcycle', vehicles: 'L1, L2, L3, L4, L5, L6', color: '#e67e22' },
@@ -17,7 +16,7 @@ const LICENSE_INFO = {
 };
 
 export default function DriverProfile() {
-  const { user, token, API, fetchMe } = useAuth();
+  const { user, API_BASE, fetchMe } = useAuth();
   const cat = user?.licenseCategory || 'B';
   const licenseInfo = LICENSE_INFO[cat] || LICENSE_INFO['B'];
   const photoRef = useRef();
@@ -42,9 +41,8 @@ export default function DriverProfile() {
       const formData = new FormData();
       formData.append('photo', file);
 
-      const res = await fetch(`${API}/drivers/${user.id}/profile`, {
+      const res = await apiFetch(`/drivers/${user.id}/profile`, {
         method: 'PUT',
-        headers: { Authorization: `Bearer ${token}` },
         body: formData
       });
 

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
@@ -31,11 +31,8 @@ export default function AdminAddDriver() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.password) {
-      return toast.error('Name, email and password are required');
-    }
+    if (!form.name || !form.email || !form.password) return toast.error('Name, email and password are required');
     if (form.password.length < 6) return toast.error('Password must be at least 6 characters');
-
     setLoading(true);
     try {
       const formData = new FormData();
@@ -62,28 +59,15 @@ export default function AdminAddDriver() {
       </div>
 
       <form onSubmit={handleSubmit} className={styles.formGrid}>
-        {/* Left: Photo */}
         <div className={styles.photoSection}>
           <div className={styles.photoCard}>
             <div className={styles.photoWrap} onClick={() => photoRef.current.click()}>
               {photoPreview
                 ? <img src={photoPreview} alt="preview" className={styles.photoPreview} />
-                : (
-                  <div className={styles.photoPlaceholder}>
-                    <span></span>
-                    <p>Click to upload driver photo</p>
-                    <small>JPG, PNG up to 5MB</small>
-                  </div>
-                )
+                : <div className={styles.photoPlaceholder}><p>Click to upload driver photo</p><small>JPG, PNG up to 5MB</small></div>
               }
             </div>
-            <input
-              type="file"
-              accept="image/*"
-              ref={photoRef}
-              onChange={handlePhoto}
-              style={{ display: 'none' }}
-            />
+            <input type="file" accept="image/*" ref={photoRef} onChange={handlePhoto} style={{ display: 'none' }} />
             <button type="button" className={styles.photoBtn} onClick={() => photoRef.current.click()}>
               {photoPreview ? 'Change Photo' : 'Upload Photo'}
             </button>
@@ -93,14 +77,12 @@ export default function AdminAddDriver() {
               </button>
             )}
           </div>
-
           <div className={styles.infoBox}>
             <h4>Account Note</h4>
             <p>Once added, the driver will use their email and password to log in. Only admins can create or delete accounts.</p>
           </div>
         </div>
 
-        {/* Right: Form */}
         <div className={styles.formFields}>
           <div className={styles.section}>
             <h3>Personal Information</h3>
@@ -135,11 +117,9 @@ export default function AdminAddDriver() {
             <div className={styles.field}>
               <label>License Category *</label>
               <select name="licenseCategory" value={form.licenseCategory} onChange={handleChange}>
-                {LICENSE_CATEGORIES.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
+                {LICENSE_CATEGORIES.map(cat => <option key={cat} value={cat}>{cat}</option>)}
               </select>
-              <small className={styles.hint}>B = Standard vehicle (default). A = Motorcycle. C = Heavy goods. D = Bus.</small>
+              <small className={styles.hint}>B = Standard vehicle. A = Motorcycle. C = Heavy goods. D = Bus.</small>
             </div>
           </div>
 

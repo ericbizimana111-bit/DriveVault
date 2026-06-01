@@ -48,17 +48,18 @@ router.post('/', async (req, res) => {
 
         await messageRecord.save();
 
-        // Create admin notification
-        const notification = new Notification({
-            userId: req.user.id,
-            type: 'message',
-            title: 'New support request',
-            message: `New message from ${messageRecord.name}: ${messageRecord.subject}`,
-            messageId: messageRecord.id,
-            relatedType: 'message',
-            actionUrl: '/admin/messages'
-        });
-        await notification.save();
+        const admins = await User.find({ role: 'admin' }).select('_id');
+        if (admins.length) {
+            await Notification.insertMany(admins.map(admin => ({
+                userId: admin._id,
+                type: 'message',
+                title: 'New support request',
+                message: `New message from ${messageRecord.name}: ${messageRecord.subject}`,
+                messageId: messageRecord.id,
+                relatedType: 'message',
+                actionUrl: '/admin/messages'
+            })));
+        }
 
         res.status(201).json({ message: 'Your message has been submitted. Admin will respond by email.' });
     } catch (err) {

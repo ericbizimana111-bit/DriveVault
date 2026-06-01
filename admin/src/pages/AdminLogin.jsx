@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
+
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 import styles from './AdminLogin.module.css';
 
 export default function AdminLogin() {
-    const { login, user } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
     const [form, setForm] = useState({ email: '', password: '' });
     const [loading, setLoading] = useState(false);
     const [showPass, setShowPass] = useState(false);
-
 
     const handleChange = e => setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
@@ -20,10 +20,6 @@ export default function AdminLogin() {
         setLoading(true);
         try {
             const u = await login(form.email, form.password);
-            if (u.role !== 'admin') {
-                toast.error('Only administrators can access this panel');
-                return;
-            }
             toast.success(`Welcome Admin, ${u.name.split(' ')[0]}!`);
             navigate('/admin');
         } catch (err) {

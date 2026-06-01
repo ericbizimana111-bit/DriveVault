@@ -4,50 +4,96 @@ import { useData } from '../context/DataContext';
 import { differenceInDays, parseISO, format } from 'date-fns';
 import styles from './DriverDocuments.module.css';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+function safeParse(date) {
+  try {
+    return date ? parseISO(date) : null;
+  } catch {
+    return null;
+  }
+}
 
 function CountdownTimer({ expiryDate }) {
-  if (!expiryDate) return <div className={styles.noExpiry}>No expiry date</div>;
-  const days = differenceInDays(parseISO(expiryDate), new Date());
-  if (days < 0) return (
-    <div className={styles.expired}>
-      <span className={styles.expiredLabel}>EXPIRED</span>
-      <span className={styles.expiredDays}>{Math.abs(days)} days ago</span>
-    </div>
-  );
-  const color = days <= 30 ? 'var(--danger)' : days <= 90 ? 'var(--warning)' : 'var(--success)';
+  const parsed = safeParse(expiryDate);
+
+  if (!parsed) {
+    return <div className={styles.noExpiry}>No expiry date</div>;
+  }
+
+  const days = differenceInDays(parsed, new Date());
+
+  if (days < 0) {
+    return (
+      <div className={styles.expired}>
+        <span className={styles.expiredLabel}>EXPIRED</span>
+        <span className={styles.expiredDays}>{Math.abs(days)} days ago</span>
+      </div>
+    );
+  }
+
+  const color =
+    days <= 30
+      ? 'var(--danger)'
+      : days <= 90
+        ? 'var(--warning)'
+        : 'var(--success)';
+
   return (
     <div className={styles.countdown}>
-      <div className={styles.countdownNum} style={{ color }}>{days}</div>
+      <div className={styles.countdownNum} style={{ color }}>
+        {days}
+      </div>
       <div className={styles.countdownLabel}>days remaining</div>
     </div>
   );
 }
 
-
 export default function DriverDocuments() {
   const { user } = useAuth();
   const { fetchDriverDocuments } = useData();
+
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    if (user?.id) {
-      fetchDriverDocuments(user.id)
-        .then(d => { setDocs(d); setLoading(false); })
-        .catch(() => setLoading(false));
-    }
-  }, [user]);
+    let mounted = true;
 
-  const filtered = docs.filter(doc => {
+    const load = async () => {
+      if (!user?.id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const data = await fetchDriverDocuments(user.id);
+        if (mounted) setDocs(data || []);
+      } catch (err) {
+        console.error('Failed to load documents:', err);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
+  }, [user?.id, fetchDriverDocuments]);
+
+  const filtered = docs.filter((doc) => {
     if (filter === 'all') return true;
-    if (!doc.expiryDate) return filter === 'valid';
-    const days = differenceInDays(parseISO(doc.expiryDate), new Date());
+
+    const expiry = safeParse(doc.expiryDate);
+    if (!expiry) return filter === 'valid';
+
+    const days = differenceInDays(expiry, new Date());
+
     if (filter === 'expired') return days < 0;
     if (filter === 'expiring') return days >= 0 && days <= 30;
     if (filter === 'valid') return days > 30;
+
     return true;
   });
 
@@ -62,13 +108,20 @@ export default function DriverDocuments() {
 
       {/* Filters */}
       <div className={styles.filters}>
-        {['all', 'valid', 'expiring', 'expired'].map(f => (
+        {['all', 'valid', 'expiring', 'expired'].map((f) => (
           <button
             key={f}
-            className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
+            className={`${styles.filterBtn} ${filter === f ? styles.active : ''
+              }`}
             onClick={() => setFilter(f)}
           >
-            {f === 'all' ? 'All' : f === 'valid' ? ' Valid' : f === 'expiring' ? ' Expiring Soon' : ' Expired'}
+            {f === 'all'
+              ? 'All'
+              : f === 'valid'
+                ? 'Valid'
+                : f === 'expiring'
+                  ? 'Expiring Soon'
+                  : 'Expired'}
           </button>
         ))}
       </div>
@@ -77,35 +130,79 @@ export default function DriverDocuments() {
         <div className={styles.loading}>Loading your documents...</div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <div></div>
-          <p>{docs.length === 0 ? 'No documents yet. Contact your administrator.' : 'No documents match this filter.'}</p>
+          <p>
+            {docs.length === 0
+              ? 'No documents yet. Contact your administrator.'
+              : 'No documents match this filter.'}
+          </p>
         </div>
       ) : (
         <div className={styles.docsGrid}>
-          {filtered.map(doc => (
-            <div className={styles.docCard} key={doc.id} onClick={() => setSelected(doc)}>
+          {filtered.map((doc) => (
+            <div
+              className={styles.docCard}
+              key={doc.id}
+              onClick={() => setSelected(doc)}
+            >
               {doc.documentPhoto && (
                 <div className={styles.docPhotoWrap}>
-                  <img src={`${API_BASE}${doc.documentPhoto}`} alt="document" className={styles.docPhoto} />
+                  <img
+                    src={doc.documentPhoto}
+                    alt="document"
+                    className={styles.docPhoto}
+                  />
                 </div>
               )}
+
               <div className={styles.docBody}>
                 <div className={styles.docTop}>
                   <div className={styles.docTypeWrap}>
                     <span className={styles.docIcon}></span>
-                    <span className={styles.docType}>{doc.documentType}</span>
+                    <span className={styles.docType}>
+                      {doc.documentType}
+                    </span>
                   </div>
+
                   <CountdownTimer expiryDate={doc.expiryDate} />
                 </div>
+
                 <div className={styles.docDetails}>
-                  <div className={styles.detailRow}><span>Document No.</span><code>{doc.documentNumber}</code></div>
-                  <div className={styles.detailRow}><span>Issued By</span><strong>{doc.issuedBy}</strong></div>
-                  <div className={styles.detailRow}><span>Issue Date</span><strong>{doc.issueDate ? format(parseISO(doc.issueDate), 'dd MMM yyyy') : 'N/A'}</strong></div>
-                  {doc.expiryDate && <div className={styles.detailRow}><span>Expires</span><strong>{format(parseISO(doc.expiryDate), 'dd MMM yyyy')}</strong></div>}
+                  <div className={styles.detailRow}>
+                    <span>Document No.</span>
+                    <code>{doc.documentNumber}</code>
+                  </div>
+
+                  <div className={styles.detailRow}>
+                    <span>Issued By</span>
+                    <strong>{doc.issuedBy}</strong>
+                  </div>
+
+                  <div className={styles.detailRow}>
+                    <span>Issue Date</span>
+                    <strong>
+                      {doc.issueDate
+                        ? format(parseISO(doc.issueDate), 'dd MMM yyyy')
+                        : 'N/A'}
+                    </strong>
+                  </div>
+
+                  {doc.expiryDate && (
+                    <div className={styles.detailRow}>
+                      <span>Expires</span>
+                      <strong>
+                        {format(parseISO(doc.expiryDate), 'dd MMM yyyy')}
+                      </strong>
+                    </div>
+                  )}
                 </div>
+
                 <div className={styles.paymentBox}>
-                  <div className={styles.paymentLabel}>Payment Code for Renewal</div>
-                  <div className={styles.paymentCode}>{doc.paymentCode}</div>
+                  <div className={styles.paymentLabel}>
+                    Payment Code for Renewal
+                  </div>
+                  <div className={styles.paymentCode}>
+                    {doc.paymentCode}
+                  </div>
                 </div>
               </div>
             </div>
@@ -115,23 +212,67 @@ export default function DriverDocuments() {
 
       {/* Modal */}
       {selected && (
-        <div className={styles.modalOverlay} onClick={() => setSelected(null)}>
-          <div className={styles.modal} onClick={e => e.stopPropagation()}>
-            <button className={styles.modalClose} onClick={() => setSelected(null)}>×</button>
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setSelected(null)}
+        >
+          <div
+            className={styles.modal}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className={styles.modalClose}
+              onClick={() => setSelected(null)}
+            >
+              ×
+            </button>
+
             <h2>{selected.documentType}</h2>
+
             {selected.documentPhoto && (
-              <img src={`${API_BASE}${selected.documentPhoto}`} alt="document" className={styles.modalPhoto} />
+              <img
+                src={selected.documentPhoto}
+                alt="document"
+                className={styles.modalPhoto}
+              />
             )}
+
             <div className={styles.modalDetails}>
-              <div className={styles.detailRow}><span>Document Number</span><code>{selected.documentNumber}</code></div>
-              <div className={styles.detailRow}><span>Issued By</span><strong>{selected.issuedBy}</strong></div>
-              <div className={styles.detailRow}><span>Issue Date</span><strong>{selected.issueDate}</strong></div>
-              <div className={styles.detailRow}><span>Expiry Date</span><strong>{selected.expiryDate || 'No expiry'}</strong></div>
-              <div className={styles.detailRow}><span>Status</span><strong>{selected.status}</strong></div>
+              <div className={styles.detailRow}>
+                <span>Document Number</span>
+                <code>{selected.documentNumber}</code>
+              </div>
+
+              <div className={styles.detailRow}>
+                <span>Issued By</span>
+                <strong>{selected.issuedBy}</strong>
+              </div>
+
+              <div className={styles.detailRow}>
+                <span>Issue Date</span>
+                <strong>{selected.issueDate}</strong>
+              </div>
+
+              <div className={styles.detailRow}>
+                <span>Expiry Date</span>
+                <strong>
+                  {selected.expiryDate || 'No expiry'}
+                </strong>
+              </div>
+
+              <div className={styles.detailRow}>
+                <span>Status</span>
+                <strong>{selected.status}</strong>
+              </div>
             </div>
+
             <div className={styles.paymentBox}>
-              <div className={styles.paymentLabel}>Payment Code</div>
-              <div className={styles.paymentCode}>{selected.paymentCode}</div>
+              <div className={styles.paymentLabel}>
+                Payment Code
+              </div>
+              <div className={styles.paymentCode}>
+                {selected.paymentCode}
+              </div>
             </div>
           </div>
         </div>

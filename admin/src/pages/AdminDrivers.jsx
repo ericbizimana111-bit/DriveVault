@@ -1,14 +1,16 @@
+
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 import styles from './AdminDrivers.module.css';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 const getId = item => item?.id || item?._id;
 
 export default function AdminDrivers() {
   const { drivers, fetchDrivers, deleteDriver, loading } = useData();
+  const { API_BASE } = useAuth();
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [confirmId, setConfirmId] = useState(null);
@@ -43,23 +45,21 @@ export default function AdminDrivers() {
         </button>
       </div>
 
-      {/* Search */}
       <div className={styles.searchBar}>
-        <span className={styles.searchIcon}></span>
+        <span className={styles.searchIcon}>🔍</span>
         <input
           type="text"
           placeholder="Search by name, email or National ID..."
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
-        {search && <button className={styles.clearBtn} onClick={() => setSearch('')}></button>}
+        {search && <button className={styles.clearBtn} onClick={() => setSearch('')}>✕</button>}
       </div>
 
       {loading ? (
         <div className={styles.loading}>Loading drivers...</div>
       ) : filtered.length === 0 ? (
         <div className={styles.empty}>
-          <div></div>
           <p>{search ? 'No drivers match your search.' : 'No drivers registered yet.'}</p>
           {!search && <button onClick={() => navigate('/admin/drivers/add')}>Add First Driver →</button>}
         </div>
@@ -95,33 +95,13 @@ export default function AdminDrivers() {
                   </td>
                   <td><code>{driver.nationalId || '—'}</code></td>
                   <td>{driver.phone || '—'}</td>
-                  <td>
-                    <span className={styles.catBadge}>{driver.licenseCategory || 'B'}</span>
-                  </td>
+                  <td><span className={styles.catBadge}>{driver.licenseCategory || 'B'}</span></td>
                   <td>{driver.createdAt ? new Date(driver.createdAt).toLocaleDateString() : '—'}</td>
                   <td>
                     <div className={styles.actions}>
-                      <button
-                        className={styles.editBtn}
-                        onClick={() => navigate(`/admin/drivers/${getId(driver)}/edit`)}
-                        title="Edit Driver"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className={styles.docBtn}
-                        onClick={() => navigate(`/admin/documents/add?driverId=${getId(driver)}&driverName=${encodeURIComponent(driver.name)}`)}
-                        title="Add Document"
-                      >
-                        + Doc
-                      </button>
-                      <button
-                        className={styles.deleteBtn}
-                        onClick={() => setConfirmId(getId(driver))}
-                        title="Delete Driver"
-                      >
-                        Delete
-                      </button>
+                      <button className={styles.editBtn} onClick={() => navigate(`/admin/drivers/${getId(driver)}/edit`)}>Edit</button>
+                      <button className={styles.docBtn} onClick={() => navigate(`/admin/documents/add?driverId=${getId(driver)}&driverName=${encodeURIComponent(driver.name)}`)}>+ Doc</button>
+                      <button className={styles.deleteBtn} onClick={() => setConfirmId(getId(driver))}>Delete</button>
                     </div>
                   </td>
                 </tr>
@@ -131,11 +111,9 @@ export default function AdminDrivers() {
         </div>
       )}
 
-      {/* Confirm Delete Modal */}
       {confirmId && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
-            <div className={styles.modalIcon}></div>
             <h3>Delete Driver?</h3>
             <p>This will permanently delete the driver and all their documents. This action cannot be undone.</p>
             <div className={styles.modalActions}>

@@ -10,6 +10,7 @@ import AdminAddDriver from './pages/AdminAddDriver';
 import AdminEditDriver from './pages/AdminEditDriver';
 import AdminDocuments from './pages/AdminDocuments';
 import AdminAddDocument from './pages/AdminAddDocument';
+import AdminMessages from './pages/AdminMessages';
 import AdminLayout from './components/AdminLayout';
 import ProtectedAdminRoute from './components/ProtectedAdminRoute';
 
@@ -32,6 +33,7 @@ const App = () => {
                   <Route path="/admin/drivers/:id/edit" element={<AdminEditDriver />} />
                   <Route path="/admin/documents" element={<AdminDocuments />} />
                   <Route path="/admin/documents/add" element={<AdminAddDocument />} />
+                  <Route path="/admin/messages" element={<AdminMessages />} />
                 </Route>
               </Route>
 

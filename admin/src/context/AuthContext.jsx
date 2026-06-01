@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { apiFetch, getApiUrl } from '../utils/apiClient';
+
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { apiFetch, getApiUrl, getApiBase } from '../utils/apiClient';
 
 const AuthContext = createContext(null);
 
@@ -11,8 +12,8 @@ export function AuthProvider({ children }) {
   const logout = useCallback(async () => {
     try {
       await apiFetch('/auth/logout', { method: 'POST' });
-    } catch (error) {
-      console.warn('Logout request failed', error);
+    } catch (e) {
+      console.warn('Logout request failed', e);
     }
     localStorage.removeItem('rwd_token');
     setToken(null);
@@ -21,22 +22,21 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+      if (!token) { setLoading(false); return; }
       try {
         const res = await apiFetch('/auth/me', {
           headers: { Authorization: `Bearer ${token}` }
         });
         if (res.ok) {
           const data = await res.json();
+          // Only allow admins to stay logged in on the admin panel
+          if (data.role !== 'admin') { logout(); return; }
           setUser(data);
         } else {
           logout();
         }
-      } catch (error) {
-        console.error('Failed to fetch user:', error);
+      } catch (e) {
+        console.error('Failed to fetch user:', e);
         logout();
       } finally {
         setLoading(false);
@@ -56,8 +56,8 @@ export function AuthProvider({ children }) {
       } else {
         logout();
       }
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
+    } catch (e) {
+      console.error('Failed to fetch user:', e);
       logout();
     } finally {
       setLoading(false);
@@ -67,7 +67,6 @@ export function AuthProvider({ children }) {
   const login = useCallback(async (email, password) => {
     const res = await apiFetch('/auth/login', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
     const data = await res.json();
@@ -79,6 +78,9 @@ export function AuthProvider({ children }) {
       }
       throw error;
     }
+    if (data.user?.role !== 'admin') {
+      throw new Error('Only administrators can access this panel');
+    }
     localStorage.setItem('rwd_token', data.token);
     setToken(data.token);
     setUser(data.user);
@@ -86,7 +88,11 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading, fetchMe, API: getApiUrl() }}>
+    <AuthContext.Provider value={{
+      user, token, login, logout, loading, fetchMe,
+      API: getApiUrl(),
+      API_BASE: getApiBase()
+    }}>
       {children}
     </AuthContext.Provider>
   );
